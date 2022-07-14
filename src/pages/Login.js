@@ -9,6 +9,9 @@ function Login() {
 
   function handleSubmit(event) {
     event.preventDefault();
+    localStorage.setItem('user', JSON.stringify({ email: emailInput }));
+    localStorage.setItem('mealsToken', JSON.stringify(1));
+    localStorage.setItem('cocktailsToken', JSON.stringify(1));
   }
 
   useEffect(() => {
