@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import drinkIcon from '../images/drinkIcon.svg';
 import mealIcon from '../images/mealIcon.svg';
 
@@ -9,16 +10,20 @@ function Footer() {
       data-testid="footer"
     >
       <div className="flex justify-between">
-        <img
-          src={ drinkIcon }
-          alt="drinks"
-          data-testid="drinks-bottom-btn"
-        />
-        <img
-          src={ mealIcon }
-          alt="meals"
-          data-testid="food-bottom-btn"
-        />
+        <Link to="/drinks">
+          <img
+            src={ drinkIcon }
+            alt="drinks"
+            data-testid="drinks-bottom-btn"
+          />
+        </Link>
+        <Link to="/foods">
+          <img
+            src={ mealIcon }
+            alt="meals"
+            data-testid="food-bottom-btn"
+          />
+        </Link>
       </div>
     </footer>
   );
