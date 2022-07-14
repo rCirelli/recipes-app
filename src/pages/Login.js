@@ -1,8 +1,31 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
+
+const MIN_PASSWORD_LENGTH = 6;
 
 function Login() {
+  const [isBtnDisable, setIsBtnDisable] = useState(true);
+  const [emailInput, setEmailInput] = useState('');
+  const [passwordLength, setPasswordLength] = useState(0);
+
   function handleSubmit(event) {
     event.preventDefault();
+  }
+
+  useEffect(() => {
+    const formatEmail = /\S+@\S+\.\S+/;
+    if (formatEmail.test(emailInput) && passwordLength > MIN_PASSWORD_LENGTH) {
+      setIsBtnDisable(false);
+    } else {
+      setIsBtnDisable(true);
+    }
+  }, [passwordLength, emailInput]);
+
+  function handleEmail({ target }) {
+    setEmailInput(target.value);
+  }
+
+  function handlePassword({ target }) {
+    setPasswordLength(target.value.length);
   }
 
   return (
@@ -13,13 +36,31 @@ function Login() {
       >
         <label htmlFor="email-input">
           Insira seu e-mail
-          <input id="email-input" type="email" data-testid="email-input" />
+          <input
+            value={ emailInput }
+            onChange={ handleEmail }
+            id="email-input"
+            type="email"
+            data-testid="email-input"
+          />
         </label>
         <label htmlFor="password-input">
           Insira sua senha
-          <input id="password-input" type="password" data-testid="password-input" />
+          <input
+            onChange={ handlePassword }
+            id="password-input"
+            type="password"
+            data-testid="password-input"
+          />
         </label>
-        <button data-testid="login-submit-btn" type="submit">Enter</button>
+        <button
+          disabled={ isBtnDisable }
+          data-testid="login-submit-btn"
+          type="submit"
+        >
+          Enter
+
+        </button>
       </form>
     </div>
   );
