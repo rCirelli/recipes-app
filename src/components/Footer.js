@@ -10,23 +10,11 @@ function Footer() {
       data-testid="footer"
     >
       <div className="flex justify-between">
-        <Link
-          to="/drinks"
-          data-testid="drinks-bottom-btn"
-        >
-          <img
-            src={ drinkIcon }
-            alt="drinks"
-          />
+        <Link to="/drinks">
+          <img src={ drinkIcon } alt="drinks" data-testid="drinks-bottom-btn" />
         </Link>
-        <Link
-          to="/foods"
-          data-testid="food-bottom-btn"
-        >
-          <img
-            src={ mealIcon }
-            alt="foods"
-          />
+        <Link to="/foods">
+          <img src={ mealIcon } alt="foods" data-testid="food-bottom-btn" />
         </Link>
       </div>
     </footer>
