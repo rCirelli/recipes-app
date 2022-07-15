@@ -30,7 +30,6 @@ function App() {
           path="/drinks/:id"
           render={ (props) => <RecipeDetails { ...props } recipeType="drink" /> }
         />
-        {/* <Route exact path="/drinks/:drinkId" component={ DrinkDetails } /> */}
         <Route path="/drinks/:drinkId/in-progress" component={ DrinkInProgress } />
         <Route path="/profile" component={ Profile } />
         <Route path="/done-recipes" component={ DoneRecipes } />
