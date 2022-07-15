@@ -1,0 +1,51 @@
+.race-by {
+
+  --uib-size: 80px;
+
+  --uib-speed: 1.4s;
+
+  --uib-color: black;
+
+  --uib-line-weight: 5px;
+  align-items: center;
+  border-radius: calc(var(--uib-line-weight) / 2);
+  display: flex;
+  height: var(--uib-line-weight);
+  justify-content: center;
+  overflow: hidden;
+  position: relative;
+  transform: translate3d(0, 0, 0);
+  width: var(--uib-size);
+}
+
+.race-by:before {
+  background-color: var(--uib-color);
+  content: '';
+  height: 100%;
+  left: 0;
+  opacity: 0.1;
+  position: absolute;
+  top: 0;
+  width: 100%;
+}
+
+.race-by:after {
+  animation: raceBy var(--uib-speed) ease-in-out infinite;
+  background-color: var(--uib-color);
+  border-radius: calc(var(--uib-line-weight) / 2);
+  content: '';
+  height: 100%;
+  transform: translateX(-100%);
+  width: 100%;
+}
+
+@keyframes raceBy {
+
+  0% {
+    transform: translateX(-100%);
+  }
+
+  100% {
+    transform: translateX(100%);
+  }
+}
