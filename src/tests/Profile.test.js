@@ -33,4 +33,9 @@ describe('Testa a tela Profile', () => {
 
     userEvent.click(logoutBtn);
   });
+
+  it('Testa a tela Profile quando não passa pelo login', () => {
+    const { history } = renderWithRouter(<App />);
+    history.push('/profile');
+  });
 });
