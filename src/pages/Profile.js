@@ -14,7 +14,7 @@ function Profile() {
 
   useEffect(() => {
     const storageUser = localStorage.getItem('user');
-    if (storageUser) {
+    if (storageUser !== null) {
       setUser(JSON.parse(storageUser));
     }
   }, []);
