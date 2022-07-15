@@ -8,7 +8,7 @@ function Recipes() {
 
   return (
     <div>
-      {meals?.map((meal, index) => (
+      {meals?.slice(0, twelve).map((meal, index) => (
         <div
           key={ meal.idMeal }
           data-testid={ String(index).concat('-recipe-card') }
