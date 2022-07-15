@@ -3,7 +3,7 @@ import React from 'react';
 function RecommendedRecipe() {
   return (
     <div>
-      Recomendado
+      Recomendados
     </div>
   );
 }
