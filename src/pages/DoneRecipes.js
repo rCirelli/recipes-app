@@ -1,8 +1,9 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Header from '../components/Header';
 import shareIcon from '../images/shareIcon.svg';
 
 function DoneRecipes() {
+  const [linkIsCopied, setLinkIsCopied] = useState(false);
   const doneRecipes = [
     {
       id: '52771',
@@ -27,6 +28,12 @@ function DoneRecipes() {
       tags: [],
     },
   ];
+
+  function handleShareBtn(id, type) {
+    const urlToBeClip = `http://localhost:3000/${type}s/${id}`;
+    navigator.clipboard.writeText(urlToBeClip);
+    setLinkIsCopied(true);
+  }
 
   return (
     <div>
@@ -65,7 +72,13 @@ function DoneRecipes() {
                       </div>
                     ))
                   }
-                  <button type="button">
+                  <button
+                    onClick={ () => handleShareBtn(recipe.id, recipe.type) }
+                    type="button"
+                  >
+                    {
+                      linkIsCopied && <p>Link copied!</p>
+                    }
                     <img
                       data-testid={ `${index}-horizontal-share-btn` }
                       src={ shareIcon }
@@ -90,7 +103,10 @@ function DoneRecipes() {
                   >
                     { recipe.doneDate }
                   </p>
-                  <button type="button">
+                  <button
+                    onClick={ () => handleShareBtn(recipe.id, recipe.type) }
+                    type="button"
+                  >
                     <img
                       data-testid={ `${index}-horizontal-share-btn` }
                       src={ shareIcon }
