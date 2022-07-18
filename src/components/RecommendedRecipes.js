@@ -27,7 +27,7 @@ function RecommendedRecipes({ recipeType, recommendations }) {
   const type = keys.type[recipeType];
 
   return (
-    <div className="w-full mb-7 pl-7">
+    <div className="w-full mb-20 pl-7">
       <h3 className="text-xl font-medium mb-4">
         Recommendations
       </h3>
