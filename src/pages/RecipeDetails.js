@@ -1,26 +1,36 @@
 import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import useFetch from '../hooks/useFetch';
-import RecommendedRecipe from '../components/RecommendedRecipe';
+import RecommendedRecipes from '../components/RecommendedRecipes';
 import Loader from '../components/Loader';
 
 function RecipeDetails({ recipeType, match: { params: { id } } }) {
   const [isFetching, setIsFetching] = useState(true);
-  const [apiResponse, setEndpoint] = useFetch();
+  const [apiDetails, setDetailsEndpoint] = useFetch();
+  const [apiRecommendations, setApiRecommendations] = useFetch();
   const [recipeDetails, setRecipeDetails] = useState({});
 
   useEffect(() => {
     const endpoints = {
-      food: 'https://www.themealdb.com/api/json/v1/1/lookup.php?i=',
-      drink: 'https://www.thecocktaildb.com/api/json/v1/1/lookup.php?i=',
+      food: {
+        details: 'https://www.themealdb.com/api/json/v1/1/lookup.php?i=',
+        recommendations: 'https://www.thecocktaildb.com/api/json/v1/1/search.php?s=',
+      },
+      drink: {
+        details: 'https://www.thecocktaildb.com/api/json/v1/1/lookup.php?i=',
+        recommendations: 'https://www.themealdb.com/api/json/v1/1/search.php?s=',
+      },
     };
 
-    setEndpoint(`${endpoints[recipeType]}${id}`);
-  }, [id, recipeType, setEndpoint]);
+    setDetailsEndpoint(`${endpoints[recipeType].details}${id}`);
+    setApiRecommendations(`${endpoints[recipeType].recommendations}`);
+  }, [id, recipeType, setDetailsEndpoint, setApiRecommendations]);
 
   useEffect(() => {
-    if (apiResponse.meals || apiResponse.drinks) {
-      const details = Object.values(apiResponse)[0][0];
+    const hasDetails = apiDetails.meals || apiDetails.drinks;
+    const hasRecommendations = apiRecommendations.meals || apiRecommendations.drinks;
+    if (hasDetails && hasRecommendations) {
+      const details = Object.values(apiDetails)[0][0];
       const ingredients = Object.entries(details)
         .filter(([key]) => key.includes('Ingredient'))
         .map(([, ingredient]) => ingredient);
@@ -31,7 +41,7 @@ function RecipeDetails({ recipeType, match: { params: { id } } }) {
       setRecipeDetails({ ...details, ingredients, measures });
       setIsFetching(false);
     }
-  }, [apiResponse]);
+  }, [apiDetails, apiRecommendations]);
 
   const type = {
     food: {
@@ -50,7 +60,7 @@ function RecipeDetails({ recipeType, match: { params: { id } } }) {
     <div className="min-h-screen max-w-screen flex flex-col justify-center items-center">
       {
         isFetching ? <Loader /> : (
-          <div>
+          <div className="w-screen">
             <img
               data-testid="recipe-photo"
               src={ recipeDetails[type[recipeType].thumbnail] }
@@ -114,28 +124,33 @@ function RecipeDetails({ recipeType, match: { params: { id } } }) {
             </div>
             {
               recipeType === 'food' && (
-                <>
+                <div className="mb-7">
                   <h3 className="text-xl font-medium -mb-8 pl-7">
                     Video
                   </h3>
                   <iframe
                     data-testid="video"
-                    className="mt-10 w-screen h-52"
+                    className="mt-10 w-full h-52"
                     src={ `https://www.youtube.com/embed/${recipeDetails.strYoutube.split('=')[1]}` }
                     title={ recipeDetails[type[recipeType].name] }
                     frameBorder="0"
                     allowFullScreen
                   />
-                </>
+                </div>
               )
             }
-            <ul>
-              <li
-                data-testid={ String(0).concat('-recomendation-card') }
-              >
-                <RecommendedRecipe />
-              </li>
-            </ul>
+            <RecommendedRecipes
+              recommendations={ apiRecommendations }
+              recipeType={ recipeType }
+            />
+            <button
+              type="button"
+              data-testid="start-recipe-btn"
+              className="w-11/12 mx-auto bg-emerald-500 py-4 text-lg font-medium
+                tracking-loose rounded-t-full text-slate-200 fixed bottom-0 inset-x-0"
+            >
+              Start Recipe
+            </button>
           </div>
         )
       }
