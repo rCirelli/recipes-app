@@ -143,6 +143,14 @@ function RecipeDetails({ recipeType, match: { params: { id } } }) {
               recommendations={ apiRecommendations }
               recipeType={ recipeType }
             />
+            <button
+              type="button"
+              data-testid="start-recipe-btn"
+              className="w-11/12 mx-auto bg-emerald-500 py-4 text-lg font-medium
+                tracking-loose rounded-t-full text-slate-200 fixed bottom-0 inset-x-0"
+            >
+              Start Recipe
+            </button>
           </div>
         )
       }
