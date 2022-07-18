@@ -6,21 +6,29 @@ import Loader from '../components/Loader';
 
 function RecipeDetails({ recipeType, match: { params: { id } } }) {
   const [isFetching, setIsFetching] = useState(true);
-  const [apiResponse, setEndpoint] = useFetch();
+  const [apiDetails, setDetailsEndpoint] = useFetch();
+  const [apiRecommendations, setApiRecommendations] = useFetch();
   const [recipeDetails, setRecipeDetails] = useState({});
 
   useEffect(() => {
     const endpoints = {
-      food: 'https://www.themealdb.com/api/json/v1/1/lookup.php?i=',
-      drink: 'https://www.thecocktaildb.com/api/json/v1/1/lookup.php?i=',
+      food: {
+        details: 'https://www.themealdb.com/api/json/v1/1/lookup.php?i=',
+        recommendations: 'https://www.thecocktaildb.com/api/json/v1/1/search.php?s=',
+      },
+      drink: {
+        details: 'https://www.thecocktaildb.com/api/json/v1/1/lookup.php?i=',
+        recommendations: 'https://www.themealdb.com/api/json/v1/1/search.php?s=',
+      },
     };
 
-    setEndpoint(`${endpoints[recipeType]}${id}`);
-  }, [id, recipeType, setEndpoint]);
+    setDetailsEndpoint(`${endpoints[recipeType].details}${id}`);
+    setApiRecommendations(`${endpoints[recipeType].recommendations}`);
+  }, [id, recipeType, setDetailsEndpoint, setApiRecommendations]);
 
   useEffect(() => {
-    if (apiResponse.meals || apiResponse.drinks) {
-      const details = Object.values(apiResponse)[0][0];
+    if (apiDetails.meals || apiDetails.drinks) {
+      const details = Object.values(apiDetails)[0][0];
       const ingredients = Object.entries(details)
         .filter(([key]) => key.includes('Ingredient'))
         .map(([, ingredient]) => ingredient);
@@ -31,7 +39,7 @@ function RecipeDetails({ recipeType, match: { params: { id } } }) {
       setRecipeDetails({ ...details, ingredients, measures });
       setIsFetching(false);
     }
-  }, [apiResponse]);
+  }, [apiDetails]);
 
   const type = {
     food: {
