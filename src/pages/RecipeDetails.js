@@ -83,6 +83,8 @@ function RecipeDetails({ recipeType }) {
       history.push(`/drinks/${id}/in-progress`);
     }
 
+    console.log(setDoneRecipes);
+    console.log(setInProgress);
     // ? para adicionar a receita à lista de 'inProgress'
     // const storageKeys = { food: 'meals', drink: 'cocktails' };
     // const ingredientsNumber = recipeDetails.ingredients.map((_, index) => index + 1);
@@ -93,7 +95,7 @@ function RecipeDetails({ recipeType }) {
 
     // ? para adicionar a receita à lista de 'doneRecipes'
     // const newDoneRecipe = {        console.log(id)
-
+    //   id: [recipeDetails[type[recipeType].id]],
     //   nationality: recipeDetails.strArea,
     //   category: recipeDetails.strCategory,
     //   alcoholicOrNot: recipeDetails.strAlcoholic,
@@ -151,7 +153,7 @@ function RecipeDetails({ recipeType }) {
               </div>
               <div className="flex gap-5">
                 <ShareBtn slug={ window.location.href } />
-                <FavoriteBtn />
+                <FavoriteBtn recipeInfo={ recipeDetails } recipeType={ recipeType } />
               </div>
             </div>
             <h3 className="text-xl font-medium mb-2">Ingredients</h3>

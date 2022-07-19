@@ -14,12 +14,10 @@ function ShareBtn({ slug }) {
   };
 
   useEffect(() => {
-    console.log('useEffect');
     if (displayMsg) {
       const TIMEOUT = 1000;
 
       const id = setTimeout(() => {
-        console.log('timeout');
         setDisplayMsg(false);
       }, TIMEOUT);
 
