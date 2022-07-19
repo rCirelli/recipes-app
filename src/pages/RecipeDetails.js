@@ -1,11 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
+import { useHistory } from 'react-router-dom';
 import useFetch from '../hooks/useFetch';
 import useLocalStorage from '../hooks/useLocalStorage';
 import RecommendedRecipes from '../components/RecommendedRecipes';
 import Loader from '../components/Loader';
 
 function RecipeDetails({ recipeType, match: { params: { id } } }) {
+  const history = useHistory();
   const [isFetching, setIsFetching] = useState(true);
   const [apiDetails, setDetailsEndpoint] = useFetch();
   const [apiRecommendations, setApiRecommendations] = useFetch();
@@ -71,6 +73,13 @@ function RecipeDetails({ recipeType, match: { params: { id } } }) {
   };
 
   const handleStartRecipe = () => {
+    if (recipeType === 'food') {
+      history.push(`/foods/${id}/in-progress`);
+    }
+    if (recipeType === 'drink') {
+      history.push(`/drinks/${id}/in-progress`);
+    }
+
     // ? para adicionar a receita à lista de 'inProgress'
     // const storageKeys = { food: 'meals', drink: 'cocktails' };
     // const ingredientsNumber = recipeDetails.ingredients.map((_, index) => index + 1);
