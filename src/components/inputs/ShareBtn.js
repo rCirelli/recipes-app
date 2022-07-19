@@ -39,7 +39,7 @@ function ShareBtn({ slug }) {
       { displayMsg && (
         <div
           className="absolute bg-slate-50 border border-1 border-slate-200 rounded-lg
-            p-1 right-10 top-[23rem]"
+            p-1 right-10 top-[23rem] font-light text-slate-800"
         >
           <p>Link copied!</p>
         </div>
