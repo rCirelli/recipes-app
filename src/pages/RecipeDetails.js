@@ -10,12 +10,13 @@ function RecipeDetails({ recipeType, match: { params: { id } } }) {
   const [apiDetails, setDetailsEndpoint] = useFetch();
   const [apiRecommendations, setApiRecommendations] = useFetch();
   const [recipeDetails, setRecipeDetails] = useState({});
-  // const [inProgress, setInProgress] = useLocalStorage('inProgressRecipes', {
-  //   cocktails: {},
-  //   meals: {},
-  // });
+  const [inProgress, setInProgress] = useLocalStorage('inProgressRecipes', {
+    cocktails: {},
+    meals: {},
+  });
   const [doneRecipes, setDoneRecipes] = useLocalStorage('doneRecipes', []);
   const [isBtnDisabled, setIsBtnDisabled] = useState(false);
+  const [isBtnResumeRecipe, setIsBtnResumeRecipe] = useState(false);
 
   useEffect(() => {
     const endpoints = {
@@ -79,29 +80,38 @@ function RecipeDetails({ recipeType, match: { params: { id } } }) {
     // setInProgress({ ...inProgress, [storageKeys[recipeType]]: newInProgressRecipe });
 
     // ? para adicionar a receita à lista de 'doneRecipes'
-    const newDoneRecipe = {
-      id: recipeDetails[type[recipeType].id],
-      type: recipeType,
-      nationality: recipeDetails.strArea,
-      category: recipeDetails.strCategory,
-      alcoholicOrNot: recipeDetails.strAlcoholic,
-      name: recipeDetails[type[recipeType].name],
-      image: recipeDetails[type[recipeType].thumbnail],
-    };
-    console.log(newDoneRecipe);
-    setDoneRecipes([...doneRecipes, newDoneRecipe]);
+    // const newDoneRecipe = {
+    //   id: recipeDetails[type[recipeType].id],
+    //   type: recipeType,
+    //   nationality: recipeDetails.strArea,
+    //   category: recipeDetails.strCategory,
+    //   alcoholicOrNot: recipeDetails.strAlcoholic,
+    //   name: recipeDetails[type[recipeType].name],
+    //   image: recipeDetails[type[recipeType].thumbnail],
+    // };
+    // console.log(newDoneRecipe);
+    // setDoneRecipes([...doneRecipes, newDoneRecipe]);
   };
 
-  const checkDisabledBtn = () => {
-    const isValid = doneRecipes
-      .some((recipe) => recipe.id === recipeDetails[type[recipeType].id]);
-    setIsBtnDisabled(isValid);
+  const checkBtnStatus = () => {
+    if (doneRecipes.length > 0) {
+      const isValid = doneRecipes
+        .some((recipe) => recipe.id === recipeDetails[type[recipeType].id]);
+      setIsBtnDisabled(isValid);
+    }
+
+    if (inProgress) {
+      const storageKeys = { food: 'meals', drink: 'cocktails' };
+      const progressType = storageKeys[recipeType];
+      const isInProgress = Object.keys(inProgress[progressType])
+        .some((recipe) => recipe === recipeDetails[type[recipeType].id]);
+
+      setIsBtnResumeRecipe(isInProgress);
+    }
   };
 
   useEffect(() => {
-    if (doneRecipes.length > 0) {
-      checkDisabledBtn();
-    }
+    checkBtnStatus();
   });
 
   return (
@@ -182,7 +192,7 @@ function RecipeDetails({ recipeType, match: { params: { id } } }) {
                 disabled:bg-slate-700/0 disabled:text-slate-400/0"
             onClick={ handleStartRecipe }
           >
-            Start Recipe
+            {isBtnResumeRecipe ? 'Continue Recipe' : 'Start Recipe'}
           </button>
         </div>
       )}
