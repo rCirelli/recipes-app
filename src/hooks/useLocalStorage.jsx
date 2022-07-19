@@ -20,7 +20,7 @@ export default function useLocalStorage(key, initialValue) {
       window.localStorage.setItem(key, JSON.stringify(newValue));
       setSavedValue(newValue);
     }
-  }, [newValue]);
+  }, [newValue, key]);
 
   return [savedValue, setNewValue];
 }
