@@ -5,6 +5,8 @@ import useFetch from '../hooks/useFetch';
 import useLocalStorage from '../hooks/useLocalStorage';
 import RecommendedRecipes from '../components/RecommendedRecipes';
 import Loader from '../components/Loader';
+import ShareBtn from '../components/inputs/ShareBtn';
+import FavoriteBtn from '../components/inputs/FavoriteBtn';
 
 function RecipeDetails({ recipeType, match: { params: { id } } }) {
   const history = useHistory();
@@ -135,15 +137,23 @@ function RecipeDetails({ recipeType, match: { params: { id } } }) {
             alt={ recipeDetails[type[recipeType].name] }
           />
           <div className="px-7 py-2">
-            <h1 data-testid="recipe-title" className="text-2xl font-medium">
-              {recipeDetails[type[recipeType].name]}
-            </h1>
-            <h2
-              data-testid="recipe-category"
-              className="text-md italic lowercase antialiased text-slate-500 mb-5"
-            >
-              {recipeDetails[type[recipeType].category]}
-            </h2>
+            <div className="flex justify-between items-center">
+              <div>
+                <h1 data-testid="recipe-title" className="text-2xl font-medium">
+                  {recipeDetails[type[recipeType].name]}
+                </h1>
+                <h2
+                  data-testid="recipe-category"
+                  className="text-md italic lowercase antialiased text-slate-500 mb-5"
+                >
+                  {recipeDetails[type[recipeType].category]}
+                </h2>
+              </div>
+              <div className="flex gap-3">
+                <ShareBtn />
+                <FavoriteBtn />
+              </div>
+            </div>
             <h3 className="text-xl font-medium mb-2">Ingredients</h3>
             <ul className="list-disc ml-4 mb-5">
               {recipeDetails?.ingredients.map((ingredient, index) => (
