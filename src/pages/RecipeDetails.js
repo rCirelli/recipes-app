@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
-import { useHistory } from 'react-router-dom';
+import { useHistory, useParams } from 'react-router-dom';
 import useFetch from '../hooks/useFetch';
 import useLocalStorage from '../hooks/useLocalStorage';
 import RecommendedRecipes from '../components/RecommendedRecipes';
@@ -8,8 +8,9 @@ import Loader from '../components/Loader';
 import ShareBtn from '../components/inputs/ShareBtn';
 import FavoriteBtn from '../components/inputs/FavoriteBtn';
 
-function RecipeDetails({ recipeType, match: { params: { id } } }) {
+function RecipeDetails({ recipeType }) {
   const history = useHistory();
+  const { id } = useParams();
   const [isFetching, setIsFetching] = useState(true);
   const [apiDetails, setDetailsEndpoint] = useFetch();
   const [apiRecommendations, setApiRecommendations] = useFetch();
@@ -91,9 +92,8 @@ function RecipeDetails({ recipeType, match: { params: { id } } }) {
     // setInProgress({ ...inProgress, [storageKeys[recipeType]]: newInProgressRecipe });
 
     // ? para adicionar a receita à lista de 'doneRecipes'
-    // const newDoneRecipe = {
-    //   id: recipeDetails[type[recipeType].id],
-    //   type: recipeType,
+    // const newDoneRecipe = {        console.log(id)
+
     //   nationality: recipeDetails.strArea,
     //   category: recipeDetails.strCategory,
     //   alcoholicOrNot: recipeDetails.strAlcoholic,
@@ -149,8 +149,8 @@ function RecipeDetails({ recipeType, match: { params: { id } } }) {
                   {recipeDetails[type[recipeType].category]}
                 </h2>
               </div>
-              <div className="flex gap-3">
-                <ShareBtn />
+              <div className="flex gap-5">
+                <ShareBtn slug={ window.location.href } />
                 <FavoriteBtn />
               </div>
             </div>
@@ -223,9 +223,4 @@ export default RecipeDetails;
 
 RecipeDetails.propTypes = {
   recipeType: PropTypes.string.isRequired,
-  match: PropTypes.shape({
-    params: PropTypes.shape({
-      id: PropTypes.string.isRequired,
-    }).isRequired,
-  }).isRequired,
 };
