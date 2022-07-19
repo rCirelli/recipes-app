@@ -10,10 +10,10 @@ function RecipeDetails({ recipeType, match: { params: { id } } }) {
   const [apiDetails, setDetailsEndpoint] = useFetch();
   const [apiRecommendations, setApiRecommendations] = useFetch();
   const [recipeDetails, setRecipeDetails] = useState({});
-  const [inProgress, setInProgress] = useLocalStorage('inProgressRecipes', {
-    cocktails: {},
-    meals: {},
-  });
+  // const [inProgress, setInProgress] = useLocalStorage('inProgressRecipes', {
+  //   cocktails: {},
+  //   meals: {},
+  // });
   const [doneRecipes, setDoneRecipes] = useLocalStorage('doneRecipes', []);
   const [isBtnDisabled, setIsBtnDisabled] = useState(false);
 
@@ -92,7 +92,7 @@ function RecipeDetails({ recipeType, match: { params: { id } } }) {
     setDoneRecipes([...doneRecipes, newDoneRecipe]);
   };
 
-  const checkIsBtValid = () => {
+  const checkDisabledBtn = () => {
     const isValid = doneRecipes
       .some((recipe) => recipe.id === recipeDetails[type[recipeType].id]);
     setIsBtnDisabled(isValid);
@@ -100,7 +100,7 @@ function RecipeDetails({ recipeType, match: { params: { id } } }) {
 
   useEffect(() => {
     if (doneRecipes.length > 0) {
-      checkIsBtValid();
+      checkDisabledBtn();
     }
   });
 
@@ -179,7 +179,7 @@ function RecipeDetails({ recipeType, match: { params: { id } } }) {
             data-testid="start-recipe-btn"
             className="w-11/12 mx-auto bg-emerald-500 py-4 text-lg font-medium
                 tracking-loose rounded-t-full text-slate-200 fixed bottom-0 inset-x-0
-                disabled:bg-slate-700 disabled:text-slate-400"
+                disabled:bg-slate-700/0 disabled:text-slate-400/0"
             onClick={ handleStartRecipe }
           >
             Start Recipe

@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 
 export default function useAPI() {
-  const [endpoint, setEndpoint] = useState({});
+  const [endpoint, setEndpoint] = useState('');
   const [responseData, setResponseData] = useState({});
 
   const fetchFromEndpoint = (url) => fetch(url)
@@ -12,7 +12,9 @@ export default function useAPI() {
       const apiData = await fetchFromEndpoint(endpoint);
       setResponseData(apiData);
     };
-    fetchAPI();
+    if (endpoint !== '') {
+      fetchAPI();
+    }
   }, [endpoint]);
 
   return [responseData, setEndpoint];
