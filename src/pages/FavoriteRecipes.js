@@ -13,8 +13,10 @@ function FavoriteRecipes() {
 
   async function getLocalStorageFavoriteRecipes() {
     const favRecipes = localStorage.getItem('favoriteRecipes');
-    const favRecipesJson = JSON.parse(favRecipes);
-    setFavoriteRecipes(favRecipesJson);
+    if (favRecipes !== null) {
+      const favRecipesJson = JSON.parse(favRecipes);
+      setFavoriteRecipes(favRecipesJson);
+    }
   }
 
   useEffect(() => {
