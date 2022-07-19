@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { useHistory, useParams } from 'react-router-dom';
 import useFetch from '../hooks/useFetch';
@@ -22,6 +22,7 @@ function RecipeDetails({ recipeType }) {
   const [doneRecipes, setDoneRecipes] = useLocalStorage('doneRecipes', []);
   const [isBtnDisabled, setIsBtnDisabled] = useState(false);
   const [isBtnResumeRecipe, setIsBtnResumeRecipe] = useState(false);
+  const [redirect, setRedirect] = useState(false);
 
   useEffect(() => {
     const endpoints = {
@@ -76,22 +77,24 @@ function RecipeDetails({ recipeType }) {
   };
 
   const handleStartRecipe = () => {
-    if (recipeType === 'food') {
-      history.push(`/foods/${id}/in-progress`);
-    }
-    if (recipeType === 'drink') {
-      history.push(`/drinks/${id}/in-progress`);
-    }
-
     console.log(setDoneRecipes);
-    console.log(setInProgress);
+    // console.log(setInProgress);
+
     // ? para adicionar a receita à lista de 'inProgress'
-    // const storageKeys = { food: 'meals', drink: 'cocktails' };
-    // const ingredientsNumber = recipeDetails.ingredients.map((_, index) => index + 1);
-    // const newInProgressRecipe = {
-    //   [recipeDetails[type[recipeType].id]]: ingredientsNumber,
-    // };
-    // setInProgress({ ...inProgress, [storageKeys[recipeType]]: newInProgressRecipe });
+    const storageKeys = { food: 'meals', drink: 'cocktails' };
+
+    const ingredientsNumber = recipeDetails.ingredients.map((_, index) => index + 1);
+    const newInProgressRecipe = {
+      [recipeDetails[type[recipeType].id]]: ingredientsNumber,
+      // [recipeDetails[type[recipeType].id]]: recipeDetails.ingredients,
+    };
+    const newInprogressList = {
+      ...inProgress,
+      [storageKeys[recipeType]]: newInProgressRecipe,
+    };
+
+    setInProgress(newInprogressList);
+    setRedirect(true);
 
     // ? para adicionar a receita à lista de 'doneRecipes'
     // const newDoneRecipe = {        console.log(id)
@@ -105,6 +108,23 @@ function RecipeDetails({ recipeType }) {
     // console.log(newDoneRecipe);
     // setDoneRecipes([...doneRecipes, newDoneRecipe]);
   };
+
+  const handleRedirect = useCallback(
+    () => {
+      if (recipeType === 'food') {
+        history.push(`/foods/${id}/in-progress`);
+      }
+      if (recipeType === 'drink') {
+        history.push(`/drinks/${id}/in-progress`);
+      }
+    }, [history, id, recipeType],
+  );
+
+  useEffect(() => {
+    if (redirect) {
+      handleRedirect();
+    }
+  }, [redirect, handleRedirect]);
 
   const checkBtnStatus = () => {
     if (doneRecipes.length > 0) {
