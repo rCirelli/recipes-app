@@ -12,6 +12,7 @@ export default function useLocalStorage(key, initialValue) {
     } else {
       setSavedValue(JSON.parse(savedItem));
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
