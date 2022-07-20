@@ -19,7 +19,7 @@ function RecipeDetails({ recipeType }) {
     cocktails: {},
     meals: {},
   });
-  const [doneRecipes, setDoneRecipes] = useLocalStorage('doneRecipes', []);
+  const [doneRecipes] = useLocalStorage('doneRecipes', []);
   const [isBtnDisabled, setIsBtnDisabled] = useState(false);
   const [isBtnResumeRecipe, setIsBtnResumeRecipe] = useState(false);
   const [redirect, setRedirect] = useState(false);
@@ -77,9 +77,6 @@ function RecipeDetails({ recipeType }) {
   };
 
   const handleStartRecipe = () => {
-    console.log(setDoneRecipes);
-    // console.log(setInProgress);
-
     // ? para adicionar a receita à lista de 'inProgress'
     const storageKeys = { food: 'meals', drink: 'cocktails' };
 
@@ -95,18 +92,6 @@ function RecipeDetails({ recipeType }) {
 
     setInProgress(newInprogressList);
     setRedirect(true);
-
-    // ? para adicionar a receita à lista de 'doneRecipes'
-    // const newDoneRecipe = {        console.log(id)
-    //   id: [recipeDetails[type[recipeType].id]],
-    //   nationality: recipeDetails.strArea,
-    //   category: recipeDetails.strCategory,
-    //   alcoholicOrNot: recipeDetails.strAlcoholic,
-    //   name: recipeDetails[type[recipeType].name],
-    //   image: recipeDetails[type[recipeType].thumbnail],
-    // };
-    // console.log(newDoneRecipe);
-    // setDoneRecipes([...doneRecipes, newDoneRecipe]);
   };
 
   const handleRedirect = useCallback(
