@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo, useState } from 'react';
-import { useHistory, useParams } from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import useFetch from '../hooks/useFetch';
 import ShareBtn from '../components/inputs/ShareBtn';
@@ -7,8 +7,8 @@ import FavoriteBtn from '../components/inputs/FavoriteBtn';
 import useLocalStorage from '../hooks/useLocalStorage';
 import Loader from '../components/Loader';
 
-function RecipeInProgress({ recipeType }) {
-  const { id } = useParams();
+function RecipeInProgress({ recipeType, match: { params: { id } } }) {
+  // const { id } = useParams();
   const history = useHistory();
 
   const [isBtnDisabled, setIsBtnDisabled] = useState(true);
@@ -34,13 +34,10 @@ function RecipeInProgress({ recipeType }) {
     },
   }), []);
 
-  useEffect(() => {
-    const endpoints = {
-      food: 'https://www.themealdb.com/api/json/v1/1/lookup.php?i=',
-      drink: 'https://www.thecocktaildb.com/api/json/v1/1/lookup.php?i=',
-    };
-    setRecipeEndpoint(`${endpoints[recipeType]}${id}`);
-  }, [recipeType, setRecipeEndpoint, id]);
+  const checkIsBtnDisabled = (ingredientList) => {
+    const isEnabled = ingredientList.every((item) => item === '');
+    setIsBtnDisabled(!isEnabled);
+  };
 
   const info = (recipe.meals || recipe.drinks) && Object.values(recipe)[0][0];
 
@@ -61,12 +58,24 @@ function RecipeInProgress({ recipeType }) {
   const ingredientMeasures = info && (
     ingredientsList.map((_, i) => info[`strMeasure${i + 1}`]));
 
-  const storageKeys = { food: 'meals', drink: 'cocktails' };
+  const storageKeys = useMemo(() => ({ food: 'meals', drink: 'cocktails' }), []);
+
+  useEffect(() => {
+    const endpoints = {
+      food: 'https://www.themealdb.com/api/json/v1/1/lookup.php?i=',
+      drink: 'https://www.thecocktaildb.com/api/json/v1/1/lookup.php?i=',
+    };
+    setRecipeEndpoint(`${endpoints[recipeType]}${id}`);
+
+    const test = window.localStorage.getItem('inProgressRecipes');
+    const test2 = JSON.parse(test)[storageKeys[recipeType]][id];
+    checkIsBtnDisabled(test2 || []);
+  }, [recipeType, setRecipeEndpoint, id, storageKeys]);
 
   useEffect(() => {
     // ? para adicionar a receita à lista de 'inProgress'
 
-    if (inProgressRecipes && !inProgressRecipes[storageKeys[recipeType]][id]) {
+    if (recipe && inProgressRecipes && !inProgressRecipes[storageKeys[recipeType]][id]) {
       // const recipeData = recipe[storageKeys[recipeType]][0];
       const recipeData = recipe[itemKey][0];
 
@@ -87,17 +96,12 @@ function RecipeInProgress({ recipeType }) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [recipe]);
 
-  const checkIsBtnDisabled = (ingredientList) => {
-    const isEnabled = ingredientList.every((item) => item === '');
-    setIsBtnDisabled(!isEnabled);
-  };
-
   const handleSelectIngredient = ({ target: { value } }) => {
     const newList = inProgressRecipes[storageKeys[recipeType]][id]
       .map((item, index) => {
         if (item === '' && index === Number(value)) {
           return index + 1;
-          // return ingredientsList[index];
+        // return ingredientsList[index];
         }
         return index === Number(value) ? '' : item;
       });
@@ -109,10 +113,6 @@ function RecipeInProgress({ recipeType }) {
       [storageKeys[recipeType]]: { [info[type[recipeType].id]]: newList },
     });
   };
-
-  // useEffect(() => {
-  //   setIsLoading(false);
-  // }, [inProgressRecipes]);
 
   return (
     <div className="w-screen min-h-screen flex flex-col justify-center">
@@ -154,7 +154,7 @@ function RecipeInProgress({ recipeType }) {
                 return (
                   <li
                     key={ index }
-                    // data-testid={ testId }
+                    data-testid={ testId }
                   >
                     <label
                       htmlFor={ testId }
@@ -170,7 +170,6 @@ function RecipeInProgress({ recipeType }) {
                         onClick={ handleSelectIngredient }
                         value={ index }
                         defaultChecked={ !isComplete }
-                        data-testid={ testId }
                       />
                       <span
                         className="flex gap-2 capitalize peer-checked:line-through
@@ -220,4 +219,7 @@ export default RecipeInProgress;
 
 RecipeInProgress.propTypes = {
   recipeType: PropTypes.string.isRequired,
+  match: PropTypes.shape({
+    params: PropTypes.shape({
+      id: PropTypes.string }) }).isRequired,
 };
