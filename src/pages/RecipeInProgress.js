@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useMemo } from 'react';
 import { useParams } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import useFetch from '../hooks/useFetch';
@@ -11,20 +11,12 @@ function RecipeInProgress({ recipeType }) {
   const { id } = useParams();
 
   const [recipe, setRecipeEndpoint] = useFetch();
-  const [inProgressRecipes] = useLocalStorage('inProgressRecipes', {
+  const [inProgressRecipes, setInProgressRecipes] = useLocalStorage('inProgressRecipes', {
     cocktails: {},
     meals: {},
   });
 
-  useEffect(() => {
-    const endpoints = {
-      food: 'https://www.themealdb.com/api/json/v1/1/lookup.php?i=',
-      drink: 'https://www.thecocktaildb.com/api/json/v1/1/lookup.php?i=',
-    };
-    setRecipeEndpoint(`${endpoints[recipeType]}${id}`);
-  }, [recipeType, setRecipeEndpoint, id]);
-
-  const type = {
+  const type = useMemo(() => ({
     food: {
       id: 'idMeal',
       thumbnail: 'strMealThumb',
@@ -37,11 +29,17 @@ function RecipeInProgress({ recipeType }) {
       name: 'strDrink',
       category: 'strAlcoholic',
     },
-  };
+  }), []);
+
+  useEffect(() => {
+    const endpoints = {
+      food: 'https://www.themealdb.com/api/json/v1/1/lookup.php?i=',
+      drink: 'https://www.thecocktaildb.com/api/json/v1/1/lookup.php?i=',
+    };
+    setRecipeEndpoint(`${endpoints[recipeType]}${id}`);
+  }, [recipeType, setRecipeEndpoint, id]);
 
   const info = (recipe.meals || recipe.drinks) && Object.values(recipe)[0][0];
-
-  console.log(inProgressRecipes);
 
   // const ingredientQty = inProgressRecipes && (
   //   inProgressRecipes[recipeType === 'food' ? 'meals' : 'cocktails'][id]);
@@ -55,13 +53,64 @@ function RecipeInProgress({ recipeType }) {
     )
     .map(([, ingredient]) => ingredient);
 
+  const itemKey = recipeType === 'food' ? 'meals' : 'drinks';
+
   const ingredientMeasures = info && (
     ingredientsList.map((_, i) => info[`strMeasure${i + 1}`]));
 
+  const storageKeys = { food: 'meals', drink: 'cocktails' };
+
+  useEffect(() => {
+    // ? para adicionar a receita à lista de 'inProgress'
+
+    if (inProgressRecipes && !inProgressRecipes[storageKeys[recipeType]][id]) {
+      // const recipeData = recipe[storageKeys[recipeType]][0];
+      const recipeData = recipe[itemKey][0];
+
+      const ingredientsNumber = ingredientsList.map((_, index) => index + 1);
+
+      const newInProgressRecipe = {
+        // [recipeData[type[recipeType].id]]: ingredientsList,
+        [recipeData[type[recipeType].id]]: ingredientsNumber,
+      };
+
+      const newInprogressList = {
+        ...inProgressRecipes,
+        [storageKeys[recipeType]]: newInProgressRecipe,
+      };
+
+      setInProgressRecipes(newInprogressList);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [recipe]);
+
+  const handleSelectIngredient = ({ target: { value } }) => {
+    const newList = inProgressRecipes[storageKeys[recipeType]][id]
+      .map((item, index) => {
+        if (item === '' && index === Number(value)) {
+          return index + 1;
+          // return ingredientsList[index];
+        }
+        return index === Number(value) ? '' : item;
+      });
+
+    console.log(storageKeys[recipeType]);
+
+    setInProgressRecipes({
+      ...inProgressRecipes,
+      [storageKeys[recipeType]]: { [info[type[recipeType].id]]: newList },
+    });
+  };
+
+  // useEffect(() => {
+  //   setIsLoading(false);
+  // }, [inProgressRecipes]);
+
   return (
     <div className="w-screen min-h-screen flex flex-col justify-center">
-      { !info ? <Loader /> : (
+      { !info || !inProgressRecipes ? <Loader /> : (
         <>
+          {/* {console.log(inProgressRecipes[itemKey][id])} */}
           <img
             data-testid="recipe-photo"
             src={ info[type[recipeType].thumbnail] }
@@ -87,8 +136,13 @@ function RecipeInProgress({ recipeType }) {
             </div>
             <h3 className="text-xl font-medium mb-2">Ingredients</h3>
             <ul className="mb-5">
-              { info && ingredientsList.map((ingredient, index) => {
+              { ingredientsList.map((ingredient, index) => {
                 const testId = String(index).concat('-ingredient-step');
+                const isComplete = inProgressRecipes[storageKeys[recipeType]][id]
+                  ? inProgressRecipes[storageKeys[recipeType]][id]
+                    .some((savedIngredient) => index + 1 === savedIngredient)
+                  : true;
+
                 return (
                   <li
                     key={ index }
@@ -105,6 +159,9 @@ function RecipeInProgress({ recipeType }) {
                         checked:bg-emerald-500 checked:border-emerald-500 transition-all
                         duration-250 checked:after:content-['✓'] after:ml-0.5
                         after:text-slate-200 after:font-bold peer"
+                        onClick={ handleSelectIngredient }
+                        value={ index }
+                        defaultChecked={ !isComplete }
                       />
                       <span
                         className="flex gap-2 capitalize peer-checked:line-through
