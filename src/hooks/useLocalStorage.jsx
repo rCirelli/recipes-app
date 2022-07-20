@@ -17,7 +17,7 @@ export default function useLocalStorage(key, initialValue) {
 
   useEffect(() => {
     const savedItem = window.localStorage.getItem(key);
-    if (newValue !== savedItem && newValue !== '') {
+    if (newValue !== savedItem && (newValue !== '' && newValue !== null)) {
       window.localStorage.setItem(key, JSON.stringify(newValue));
       setSavedValue(newValue);
     }

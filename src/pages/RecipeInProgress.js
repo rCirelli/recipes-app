@@ -154,7 +154,7 @@ function RecipeInProgress({ recipeType }) {
                 return (
                   <li
                     key={ index }
-                    data-testid={ testId }
+                    // data-testid={ testId }
                   >
                     <label
                       htmlFor={ testId }
@@ -170,6 +170,7 @@ function RecipeInProgress({ recipeType }) {
                         onClick={ handleSelectIngredient }
                         value={ index }
                         defaultChecked={ !isComplete }
+                        data-testid={ testId }
                       />
                       <span
                         className="flex gap-2 capitalize peer-checked:line-through
