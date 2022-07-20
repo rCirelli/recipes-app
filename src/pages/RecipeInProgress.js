@@ -1,5 +1,5 @@
-import React, { useEffect, useMemo } from 'react';
-import { useParams } from 'react-router-dom';
+import React, { useEffect, useMemo, useState } from 'react';
+import { useHistory, useParams } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import useFetch from '../hooks/useFetch';
 import ShareBtn from '../components/inputs/ShareBtn';
@@ -9,6 +9,9 @@ import Loader from '../components/Loader';
 
 function RecipeInProgress({ recipeType }) {
   const { id } = useParams();
+  const history = useHistory();
+
+  const [isBtnDisabled, setIsBtnDisabled] = useState(true);
 
   const [recipe, setRecipeEndpoint] = useFetch();
   const [inProgressRecipes, setInProgressRecipes] = useLocalStorage('inProgressRecipes', {
@@ -84,6 +87,11 @@ function RecipeInProgress({ recipeType }) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [recipe]);
 
+  const checkIsBtnDisabled = (ingredientList) => {
+    const isEnabled = ingredientList.every((item) => item === '');
+    setIsBtnDisabled(!isEnabled);
+  };
+
   const handleSelectIngredient = ({ target: { value } }) => {
     const newList = inProgressRecipes[storageKeys[recipeType]][id]
       .map((item, index) => {
@@ -94,7 +102,7 @@ function RecipeInProgress({ recipeType }) {
         return index === Number(value) ? '' : item;
       });
 
-    console.log(storageKeys[recipeType]);
+    checkIsBtnDisabled(newList);
 
     setInProgressRecipes({
       ...inProgressRecipes,
@@ -194,7 +202,9 @@ function RecipeInProgress({ recipeType }) {
                 data-testid="finish-recipe-btn"
                 className="w-full bg-emerald-500 py-4 text-lg font-medium
                   tracking-loose rounded-full text-slate-200
-                  disabled:bg-slate-700/0 disabled:text-slate-400/0"
+                  disabled:bg-slate-700 disabled:text-slate-400"
+                disabled={ isBtnDisabled }
+                onClick={ () => history.push('/done-recipes') }
               >
                 Finish Recipe
               </button>
