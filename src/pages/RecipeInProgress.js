@@ -49,8 +49,6 @@ function RecipeInProgress({ recipeType }) {
 
   return (
     <div className="w-screen">
-      { console.log(info)}
-      { console.log(ingredientQty)}
       { info && (
         <>
           <img
@@ -77,23 +75,47 @@ function RecipeInProgress({ recipeType }) {
               </div>
             </div>
             <h3 className="text-xl font-medium mb-2">Ingredients</h3>
-            <ul className="list-disc ml-4 mb-5">
-              {
-                info && ingredientsList.map((ingredient, index) => (
+            <ul className="mb-5">
+              { info && ingredientsList.map((ingredient, index) => {
+                const testId = String(index).concat('-ingredient-step');
+                return (
                   <li
                     key={ index }
-                    data-testid={ String(index).concat('-ingredient-step') }
+                    data-testid={ testId }
                   >
-                    <span className="flex gap-2">
-                      <p className="capitalize">{ingredient}</p>
-                      -
-                      <p className="text-slate-500 italic font-light antialiased">
-                        {ingredientMeasures[index]}
-                      </p>
-                    </span>
+                    <label
+                      htmlFor={ testId }
+                      className="flex gap-3 mb-3 items-start"
+                    >
+                      <input
+                        type="checkbox"
+                        id={ testId }
+                        className="h-5 w-5 appearance-none border border-gray-300 rounded
+                        checked:bg-emerald-500 checked:border-emerald-500 transition-all
+                        duration-250 checked:after:content-['✓'] after:ml-0.5
+                        after:text-slate-200 after:font-bold peer"
+                      />
+                      <span
+                        className="flex gap-2 capitalize peer-checked:line-through
+                        transition-all duration-300"
+                      >
+                        {`${ingredient} -`}
+                        <p
+                          className="text-slate-500 italic font-light
+                          antialiased lowercase"
+                        >
+                          {ingredientMeasures[index]}
+                        </p>
+                        {/* <p className="capitalize">{ingredient}</p>
+                        -
+                        <p className="text-slate-500 italic font-light antialiased">
+                          {ingredientMeasures[index]}
+                        </p> */}
+                      </span>
+                    </label>
                   </li>
-                ))
-              }
+                );
+              })}
             </ul>
             <h3 className="text-xl font-medium mb-2">Instructions</h3>
             <span data-testid="instructions">
