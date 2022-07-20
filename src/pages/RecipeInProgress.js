@@ -5,6 +5,7 @@ import useFetch from '../hooks/useFetch';
 import ShareBtn from '../components/inputs/ShareBtn';
 import FavoriteBtn from '../components/inputs/FavoriteBtn';
 import useLocalStorage from '../hooks/useLocalStorage';
+import Loader from '../components/Loader';
 
 function RecipeInProgress({ recipeType }) {
   const { id } = useParams();
@@ -20,7 +21,6 @@ function RecipeInProgress({ recipeType }) {
       food: 'https://www.themealdb.com/api/json/v1/1/lookup.php?i=',
       drink: 'https://www.thecocktaildb.com/api/json/v1/1/lookup.php?i=',
     };
-
     setRecipeEndpoint(`${endpoints[recipeType]}${id}`);
   }, [recipeType, setRecipeEndpoint, id]);
 
@@ -59,8 +59,8 @@ function RecipeInProgress({ recipeType }) {
     ingredientsList.map((_, i) => info[`strMeasure${i + 1}`]));
 
   return (
-    <div className="w-screen">
-      { info && (
+    <div className="w-screen min-h-screen flex flex-col justify-center">
+      { !info ? <Loader /> : (
         <>
           <img
             data-testid="recipe-photo"
