@@ -129,11 +129,27 @@ describe('Testa a página Recipe Details', () => {
     jest.restoreAllMocks();
   });
 
+  beforeEach(() => {
+    const recipesInProgress = {
+
+        "cocktails": {
+          "11007": ["","","",4],
+        },
+        "meals": {
+            "52904": [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15]
+        }
+    
+     }
+     localStorage.setItem('inProgressRecipes', JSON.stringify(recipesInProgress));
+
+  })
+
   it('Verifica se os componentes da tela são renderizados', async () => {
     const fetchMock = jest.spyOn(global, "fetch");
     global.fetch.mockResolvedValueOnce({
       json: jest.fn().mockResolvedValueOnce(mockFoodData),
     });
+    
     
     renderWithRouter(
       <RecipeInProgress recipeType="food" match={ {params: { id: '52904' }} } />);
@@ -162,6 +178,8 @@ describe('Testa a página Recipe Details', () => {
 
     const finishRecipeBtn = screen.getByRole('button', { name: /finish recipe/i});
     expect(finishRecipeBtn).toBeInTheDocument();
+    expect(finishRecipeBtn).toBeDisabled();
+
   });
 
   it('Verifica o comportamento dos elementos', async () => {
@@ -170,7 +188,7 @@ describe('Testa a página Recipe Details', () => {
       json: jest.fn().mockResolvedValueOnce(mockDrinkData),
     });
     
-    renderWithRouter(
+    const { history } = renderWithRouter(
       <RecipeInProgress recipeType="drink" match={ {params: { id: '11007' }} } />);
 
     expect(fetchMock).toBeCalledTimes(1);
@@ -199,19 +217,52 @@ describe('Testa a página Recipe Details', () => {
     expect(finishRecipeBtn).toBeInTheDocument();
     expect(finishRecipeBtn).toBeDisabled();
 
-    window.localStorage.setItem('inProgressRecipes', JSON.stringify({
-      "cocktails": {"11007": ['','','','']},
-      "meals": {}
-    }));
-
-    userEvent.click(screen.getByText(/tequila \-/i));
-    // expect(screen.getByRole('checkbox', {  name: /tequila \- 1 1\/2 oz/i})).toBeChecked();
+    userEvent.click(screen.getByRole('checkbox', {  name: /salt \-/i}));
     
-    // ingredients.forEach(element => {
-    //   userEvent.click(element);      
-    // });
+    expect(finishRecipeBtn).toBeEnabled();
 
-    // expect(screen.getByRole('button', { name: /finish recipe/i})).not.toBeDisabled();
+    userEvent.click(screen.getByRole('checkbox', {  name: /salt \-/i}));
+    expect(finishRecipeBtn).toBeDisabled();
+    
+    userEvent.click(screen.getByRole('checkbox', {  name: /salt \-/i}));
+    userEvent.click(finishRecipeBtn);
 
+    expect(history.location.pathname).toBe('/done-recipes')
+  });
+  it('Verifica o comportamento da pagina com o local storage vazio', async () => {
+    localStorage.clear();
+
+    const fetchMock = jest.spyOn(global, "fetch");
+    global.fetch.mockResolvedValueOnce({
+      json: jest.fn().mockResolvedValueOnce(mockDrinkData),
+    });
+    
+    const { history } = renderWithRouter(
+      <RecipeInProgress recipeType="drink" match={ {params: { id: '11007' }} } />);
+
+    expect(fetchMock).toBeCalledTimes(1);
+
+    await waitForElementToBeRemoved(() => screen.queryByText(/loading/i));
+
+    const recipeImage = screen.getByRole('img', {  name: /Margarita/i})
+    expect(recipeImage).toBeInTheDocument();
+
+    const recipeName = screen.getByRole('heading', {  name: /Margarita/i});
+    expect(recipeName).toBeInTheDocument();
+
+    const recipeCategory = screen.getByRole('heading', {  name: "Alcoholic"});
+    expect(recipeCategory).toBeInTheDocument();
+
+    const ingredients = screen.getAllByTestId(/ingredient/i);
+    expect(ingredients).toHaveLength(4);
+
+    const ingredientsCheck = screen.getAllByRole('checkbox');
+    expect(ingredientsCheck).toHaveLength(4);
+
+    const instructions = screen.getByText('Rub the rim of the glass with the lime slice to make the salt stick to it.');
+    expect(instructions).toBeInTheDocument();
+
+    const finishRecipeBtn = screen.getByRole('button', { name: /finish recipe/i});
+    expect(finishRecipeBtn).toBeInTheDocument();
   });
 });
