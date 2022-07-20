@@ -9,7 +9,8 @@ function ShareBtn({ slug }) {
   const [displayMsg, setDisplayMsg] = useState(false);
 
   const handleCopy = () => {
-    copy(slug);
+    const text = slug.replace('/in-progress', '');
+    copy(text);
     setDisplayMsg(true);
   };
 
