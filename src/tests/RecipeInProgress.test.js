@@ -228,6 +228,10 @@ describe('Testa a página Recipe Details', () => {
     userEvent.click(finishRecipeBtn);
 
     expect(history.location.pathname).toBe('/done-recipes')
+
+    history.goBack();
+
+    userEvent.click(finishRecipeBtn);
   });
   it('Verifica o comportamento da pagina com o local storage vazio', async () => {
     localStorage.clear();

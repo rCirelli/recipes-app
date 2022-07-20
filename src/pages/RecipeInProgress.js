@@ -125,8 +125,7 @@ function RecipeInProgress({ recipeType, match: { params: { id } } }) {
       doneDate: new Date().toLocaleDateString('pt-br'),
       tags: info.strTags.split(','),
     };
-    const isRecipeAlreadyDone = doneRecipes
-      .some(({ id: rId }) => rId === id);
+    const isRecipeAlreadyDone = doneRecipes.some(({ id: rId }) => rId === id);
 
     if (!isRecipeAlreadyDone) {
       setDoneRecipes([...doneRecipes, newDoneRecipe]);
