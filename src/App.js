@@ -10,7 +10,6 @@ import FoodDetails from './pages/FoodDetails';
 import FoodInProgress from './pages/FoodInProgress';
 import Foods from './pages/Foods';
 import Login from './pages/Login';
-import Recipes from './pages/Recipes';
 import Profile from './pages/Profile';
 
 function App() {
@@ -18,7 +17,6 @@ function App() {
     <RecipeProvider>
       <Switch>
         <Route exact path="/" component={ Login } />
-        <Route exact path="/recipes" component={ Recipes } />
         <Route exact path="/foods" component={ Foods } />
         <Route exact path="/foods/:foodId" component={ FoodDetails } />
         <Route path="/foods/:foodId/in-progress" component={ FoodInProgress } />
