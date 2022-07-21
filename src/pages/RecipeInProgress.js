@@ -123,7 +123,7 @@ function RecipeInProgress({ recipeType, match: { params: { id } } }) {
       name: info[type[recipeType].name],
       image: info[type[recipeType].thumbnail],
       doneDate: new Date().toLocaleDateString('pt-br'),
-      tags: info.strTags.split(','),
+      tags: info.strTags ? info.strTags.split('') : [],
     };
     const isRecipeAlreadyDone = doneRecipes.some(({ id: rId }) => rId === id);
 

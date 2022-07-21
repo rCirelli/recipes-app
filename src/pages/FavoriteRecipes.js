@@ -11,7 +11,7 @@ function FavoriteRecipes() {
   const [hasToBeRedirect, setHasToBeRedirect] = useState(false);
   const [whereRedirect, setWhereRedirect] = useState('/');
 
-  async function getLocalStorageFavoriteRecipes() {
+  function getLocalStorageFavoriteRecipes() {
     const favRecipes = localStorage.getItem('favoriteRecipes');
     if (favRecipes !== null) {
       const favRecipesJson = JSON.parse(favRecipes);
