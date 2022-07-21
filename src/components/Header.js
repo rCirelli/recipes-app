@@ -1,14 +1,21 @@
 import PropTypes from 'prop-types';
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import { Link } from 'react-router-dom';
+import RecipeContext from '../context/RecipeContext';
 import profileIcon from '../images/profileIcon.svg';
 import searchIcon from '../images/searchIcon.svg';
+import SearchBar from './SearchBar';
 
 function Header({ title, withSearchButton }) {
   const [isSearchBarVisible, setIsSearchBarVisible] = useState(false);
+  const { setSearchInput } = useContext(RecipeContext);
 
   function toggleSearchBar() {
     setIsSearchBarVisible(!isSearchBarVisible);
+  }
+
+  function handleInput({ target }) {
+    setSearchInput(target.value);
   }
 
   return (
@@ -35,7 +42,12 @@ function Header({ title, withSearchButton }) {
       }
       {
         isSearchBarVisible
-        && <input data-testid="search-input" type="text" />
+        && (
+          <>
+            <input onChange={ handleInput } data-testid="search-input" type="text" />
+            <SearchBar />
+          </>
+        )
       }
     </header>
   );
