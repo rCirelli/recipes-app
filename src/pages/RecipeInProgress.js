@@ -8,12 +8,11 @@ import useLocalStorage from '../hooks/useLocalStorage';
 import Loader from '../components/Loader';
 
 function RecipeInProgress({ recipeType, match: { params: { id } } }) {
-  // const { id } = useParams();
   const history = useHistory();
-
+  const [redirect, setRedirect] = useState(false);
   const [isBtnDisabled, setIsBtnDisabled] = useState(true);
-
   const [recipe, setRecipeEndpoint] = useFetch();
+  const [doneRecipes, setDoneRecipes] = useLocalStorage('doneRecipes', []);
   const [inProgressRecipes, setInProgressRecipes] = useLocalStorage('inProgressRecipes', {
     cocktails: {},
     meals: {},
@@ -40,10 +39,8 @@ function RecipeInProgress({ recipeType, match: { params: { id } } }) {
   };
 
   const info = (recipe.meals || recipe.drinks) && Object.values(recipe)[0][0];
-
   // const ingredientQty = inProgressRecipes && (
   //   inProgressRecipes[recipeType === 'food' ? 'meals' : 'cocktails'][id]);
-
   // const ingredientsList = info && (
   //   ingredientQty.map((item) => info[`strIngredient${item}`]));
 
@@ -66,15 +63,10 @@ function RecipeInProgress({ recipeType, match: { params: { id } } }) {
       drink: 'https://www.thecocktaildb.com/api/json/v1/1/lookup.php?i=',
     };
     setRecipeEndpoint(`${endpoints[recipeType]}${id}`);
-
-    const test = window.localStorage.getItem('inProgressRecipes');
-    const test2 = JSON.parse(test)[storageKeys[recipeType]][id];
-    checkIsBtnDisabled(test2 || []);
   }, [recipeType, setRecipeEndpoint, id, storageKeys]);
 
   useEffect(() => {
     // ? para adicionar a receita à lista de 'inProgress'
-
     if (recipe && inProgressRecipes && !inProgressRecipes[storageKeys[recipeType]][id]) {
       // const recipeData = recipe[storageKeys[recipeType]][0];
       const recipeData = recipe[itemKey][0];
@@ -96,6 +88,13 @@ function RecipeInProgress({ recipeType, match: { params: { id } } }) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [recipe]);
 
+  useEffect(() => {
+    const stored = window.localStorage.getItem('inProgressRecipes');
+    const storedList = JSON.parse(stored)[storageKeys[recipeType]][id];
+
+    checkIsBtnDisabled(storedList || []);
+  }, [id, inProgressRecipes, recipeType, storageKeys]);
+
   const handleSelectIngredient = ({ target: { value } }) => {
     const newList = inProgressRecipes[storageKeys[recipeType]][id]
       .map((item, index) => {
@@ -105,7 +104,6 @@ function RecipeInProgress({ recipeType, match: { params: { id } } }) {
         }
         return index === Number(value) ? '' : item;
       });
-
     checkIsBtnDisabled(newList);
 
     setInProgressRecipes({
@@ -114,11 +112,37 @@ function RecipeInProgress({ recipeType, match: { params: { id } } }) {
     });
   };
 
+  const handleFinishRecipe = () => {
+    // ? para adicionar a receita à lista de 'doneRecipes'
+    const newDoneRecipe = {
+      id: info[type[recipeType].id],
+      type: recipeType,
+      nationality: info.strArea,
+      category: info.strCategory,
+      alcoholicOrNot: info.strAlcoholic,
+      name: info[type[recipeType].name],
+      image: info[type[recipeType].thumbnail],
+      doneDate: new Date().toLocaleDateString('pt-br'),
+      tags: info.strTags.split(','),
+    };
+    const isRecipeAlreadyDone = doneRecipes.some(({ id: rId }) => rId === id);
+
+    if (!isRecipeAlreadyDone) {
+      setDoneRecipes([...doneRecipes, newDoneRecipe]);
+    }
+    setRedirect(true);
+  };
+
+  useEffect(() => {
+    if (redirect) {
+      history.push('/done-recipes');
+    }
+  }, [redirect, history]);
+
   return (
     <div className="w-screen min-h-screen flex flex-col justify-center">
       { !info || !inProgressRecipes ? <Loader /> : (
         <>
-          {/* {console.log(inProgressRecipes[itemKey][id])} */}
           <img
             data-testid="recipe-photo"
             src={ info[type[recipeType].thumbnail] }
@@ -204,7 +228,7 @@ function RecipeInProgress({ recipeType, match: { params: { id } } }) {
                   tracking-loose rounded-full text-slate-200
                   disabled:bg-slate-700 disabled:text-slate-400"
                 disabled={ isBtnDisabled }
-                onClick={ () => history.push('/done-recipes') }
+                onClick={ handleFinishRecipe }
               >
                 Finish Recipe
               </button>
