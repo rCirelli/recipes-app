@@ -4,6 +4,39 @@ import userEvent from '@testing-library/user-event';
 import DoneRecipes from '../pages/DoneRecipes';
 import renderWithRouter from './renderWithRouter';
 
+beforeEach(() => {
+  Object.defineProperty(window, 'localStorage', {
+    value: {
+      getItem: jest.fn(() => `[
+        {
+          "id": "52771",
+          "type": "food",
+          "nationality": "Italian",
+          "category": "Vegetarian",
+          "name": "Spicy Arrabiata Penne",
+          "image": "https://www.themealdb.com/images/media/meals/ustsqw1468250014.jpg",
+          "doneDate": "21/07/2022",
+          "tags": [
+            "Pasta",
+            "Curry"
+          ]
+        },
+        {
+          "id": "178319",
+          "type": "drink",
+          "category": "Cocktail",
+          "alcoholicOrNot": "Alcoholic",
+          "name": "Aquamarine",
+          "image": "https://www.thecocktaildb.com/images/media/drink/zvsre31572902738.jpg",
+          "doneDate": "21/07/2022"
+        }
+      ]`),
+      setItem: jest.fn(() => null),
+    },
+    writable: true,
+  });
+});
+
 Object.assign(navigator, {
   clipboard: {
     writeText: () => {},
