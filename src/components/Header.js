@@ -8,18 +8,21 @@ import SearchBar from './SearchBar';
 
 function Header({ title, withSearchButton }) {
   const [isSearchBarVisible, setIsSearchBarVisible] = useState(false);
-  const { setSearchInput } = useContext(RecipeContext);
+  // const { setSearchInput } = useContext(RecipeContext);
 
   function toggleSearchBar() {
     setIsSearchBarVisible(!isSearchBarVisible);
   }
 
-  function handleInput({ target }) {
-    setSearchInput(target.value);
-  }
+  // function handleInput({ target }) {
+  //   setSearchInput(target.value);
+  // }
 
   return (
-    <header>
+    <header
+      className="flex w-screen fixed top-0 justify-between px-5
+      items-center py-3 bg-slate-200 drop-shadow-lg"
+    >
       <Link to="/profile">
         <img
           src={ profileIcon }
@@ -41,14 +44,13 @@ function Header({ title, withSearchButton }) {
         )
       }
       {
-        isSearchBarVisible
-        && (
-          <>
-            <input onChange={ handleInput } data-testid="search-input" type="text" />
+        isSearchBarVisible && (
+          <div className="w-screen fixed top-16 left-0">
             <SearchBar />
-          </>
+          </div>
         )
       }
+      {/* <input onChange={ handleInput } data-testid="search-input" type="text" /> */}
     </header>
   );
 }
