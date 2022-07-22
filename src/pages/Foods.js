@@ -34,9 +34,10 @@ function Foods() {
                   alt={ item.strMeal }
                 />
                 <div>
+                  {/*
                   <p className="italic text-sm text-slate-500/90">
                     {`${item.strArea} - ${item.strCategory}`}
-                  </p>
+                  </p> */}
                   <p data-testid={ `${index}-card-name` }>{item.strMeal}</p>
                 </div>
               </div>
