@@ -1,8 +1,9 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { Redirect } from 'react-router-dom';
+import PropTypes from 'prop-types';
 import RecipeContext from '../context/RecipeContext';
 
-function SearchBar() {
+function SearchBar({ toggleVisible }) {
   const { setSearchResponse, searchInput, setSearchInput } = useContext(RecipeContext);
   // const [searchInput, setSearchInput] = useState('');
   const [shouldRedirect, setShouldRedirect] = useState(false);
@@ -27,7 +28,8 @@ function SearchBar() {
     drinks: {
       byIngredient: 'https://www.thecocktaildb.com/api/json/v1/1/filter.php?i=',
       byName: 'https://www.thecocktaildb.com/api/json/v1/1/search.php?s=',
-      byFirstLetter: 'https://www.thecocktaildb.com/api/json/v1/1/search.php?f=',
+      byFirstLetter:
+        'https://www.thecocktaildb.com/api/json/v1/1/search.php?f=',
     },
   };
 
@@ -70,6 +72,7 @@ function SearchBar() {
 
     const resultsArray = Object.values(responseJson)[0];
     setSearchResponse(resultsArray);
+    toggleVisible();
   }
 
   function handleInput({ target }) {
@@ -79,47 +82,64 @@ function SearchBar() {
   return shouldRedirect ? (
     <Redirect to={ redirectTarget } />
   ) : (
-    <form className="flex flex-col items-center">
+    <form className="flex flex-col items-center gap-2 px-7 py-2">
       <input
-        className="bg-slate-300"
+        className="bg-slate-300 rounded px-3 py-1 w-full"
         onChange={ handleInput }
         data-testid="search-input"
         type="text"
       />
-      <label htmlFor="ingredient-search-radio">
-        Ingredient
-        <input
-          onClick={ () => setSearchEndPoint(queryType[foodType].byIngredient) }
-          name="search-radio-btns"
-          // value={ queryType[foodType.byIngredient] }
-          data-testid="ingredient-search-radio"
-          type="radio"
-          id="ingredient-search-radio"
-        />
-      </label>
-      <label htmlFor="name-search-radio">
-        Name
-        <input
-          onClick={ () => setSearchEndPoint(queryType[foodType].byName) }
-          // value={ queryType[foodType.byName] }
-          name="search-radio-btns"
-          data-testid="name-search-radio"
-          type="radio"
-          id="name-search-radio"
-        />
-      </label>
-      <label htmlFor="first-letter-search-radio">
-        First Letter
-        <input
-          onClick={ () => setSearchEndPoint(queryType[foodType].byFirstLetter) }
-          // value={ queryType[foodType.byFirstLetter] }
-          name="search-radio-btns"
-          data-testid="first-letter-search-radio"
-          type="radio"
-          id="first-letter-search-radio"
-        />
-      </label>
-      <button data-testid="exec-search-btn" type="button" onClick={ callApi }>
+      <div className="flex flex-col gap-2">
+        <label
+          htmlFor="ingredient-search-radio"
+          className="flex items-center gap-3"
+        >
+          <input
+            onClick={ () => setSearchEndPoint(queryType[foodType].byIngredient) }
+            name="search-radio-btns"
+            // value={ queryType[foodType.byIngredient] }
+            data-testid="ingredient-search-radio"
+            type="radio"
+            id="ingredient-search-radio"
+            className="form-radio h-4 w-4"
+          />
+          Ingredient
+        </label>
+        <label htmlFor="name-search-radio" className="flex items-center gap-3">
+          <input
+            onClick={ () => setSearchEndPoint(queryType[foodType].byName) }
+            // value={ queryType[foodType.byName] }
+            name="search-radio-btns"
+            data-testid="name-search-radio"
+            type="radio"
+            id="name-search-radio"
+            className="form-radio h-4 w-4"
+          />
+          Name
+        </label>
+        <label
+          htmlFor="first-letter-search-radio"
+          className="flex items-center gap-3"
+        >
+          <input
+            onClick={ () => setSearchEndPoint(queryType[foodType].byFirstLetter) }
+            // value={ queryType[foodType.byFirstLetter] }
+            name="search-radio-btns"
+            data-testid="first-letter-search-radio"
+            type="radio"
+            id="first-letter-search-radio"
+            className="form-radio h-4 w-4"
+          />
+          First Letter
+        </label>
+      </div>
+      <button
+        className="rounded-lg py-2 w-full text-slate-200 font-medium tracking-wider
+        text-lg bg-emerald-500 active:bg-emerald-600"
+        data-testid="exec-search-btn"
+        type="button"
+        onClick={ callApi }
+      >
         Search
       </button>
     </form>
@@ -127,3 +147,7 @@ function SearchBar() {
 }
 
 export default SearchBar;
+
+SearchBar.propTypes = {
+  toggleVisible: PropTypes.func.isRequired,
+};

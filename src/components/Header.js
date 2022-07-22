@@ -1,27 +1,21 @@
 import PropTypes from 'prop-types';
-import React, { useContext, useState } from 'react';
+import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import RecipeContext from '../context/RecipeContext';
 import profileIcon from '../images/profileIcon.svg';
 import searchIcon from '../images/searchIcon.svg';
 import SearchBar from './SearchBar';
 
 function Header({ title, withSearchButton }) {
   const [isSearchBarVisible, setIsSearchBarVisible] = useState(false);
-  // const { setSearchInput } = useContext(RecipeContext);
 
-  function toggleSearchBar() {
+  const toggleSearchBar = () => {
     setIsSearchBarVisible(!isSearchBarVisible);
-  }
-
-  // function handleInput({ target }) {
-  //   setSearchInput(target.value);
-  // }
+  };
 
   return (
     <header
       className="flex w-screen fixed top-0 justify-between px-5
-      items-center py-3 bg-slate-200 drop-shadow-lg"
+      items-center py-3 bg-slate-200 drop-shadow-lg z-50 border-b border-slate-300"
     >
       <Link to="/profile">
         <img
@@ -45,12 +39,14 @@ function Header({ title, withSearchButton }) {
       }
       {
         isSearchBarVisible && (
-          <div className="w-screen fixed top-16 left-0">
-            <SearchBar />
+          <div
+            className="w-screen fixed top-14 left-0 bg-slate-200 py-4 box-shadow-xl
+            transition-all duration-1000"
+          >
+            <SearchBar toggleVisible={ toggleSearchBar } />
           </div>
         )
       }
-      {/* <input onChange={ handleInput } data-testid="search-input" type="text" /> */}
     </header>
   );
 }

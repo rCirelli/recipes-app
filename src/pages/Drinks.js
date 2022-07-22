@@ -1,22 +1,30 @@
-import React, { useContext } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import Footer from '../components/Footer';
 import Header from '../components/Header';
 import RecipeContext from '../context/RecipeContext';
 
 function Drinks() {
   const { searchResponse } = useContext(RecipeContext);
+  const [recipesList, setRecipesList] = useState([]);
 
   const MAX_RESULTS = 12;
+
+  useEffect(() => {
+    if (searchResponse.length > 0 && searchResponse[0].idDrink) {
+      setRecipesList(searchResponse);
+    }
+  }, [searchResponse]);
 
   return (
     <div className="py-14">
       <Header title="Drinks" withSearchButton />
-      {searchResponse.length > 0 && (
+      {recipesList.length > 0 && (
         <ul>
-          {searchResponse.map((item, index) => (index < MAX_RESULTS ? (
+          {recipesList.map((item, index) => (index < MAX_RESULTS ? (
             <li key={ item.idDrink }>
               <div
-                className="flex items-center bg-slate-200 my-5 mx-4 rounded-lg gap-2"
+                className="flex items-center bg-slate-100 my-5 mx-4 rounded-lg gap-2
+                drop-shadow-md"
                 data-testid={ `${index}-recipe-card` }
               >
                 <img
