@@ -23,7 +23,8 @@ function LoginInput({ id, type, label, placeholder, value, handleInput, validSty
       <p
         className="block translate-x-2 text-sm text-thin text-slate-600/0
       translate-y-8 tracking-wider order-1 peer-focus:translate-y-[0.20rem]
-      transition-all outline-none peer-focus:text-slate-700 text-[0.95rem]"
+      transition-all outline-none peer-focus:text-slate-700 text-[0.95rem]
+      pointer-events-none"
       >
         { label }
       </p>
