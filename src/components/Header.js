@@ -3,16 +3,20 @@ import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import profileIcon from '../images/profileIcon.svg';
 import searchIcon from '../images/searchIcon.svg';
+import SearchBar from './SearchBar';
 
 function Header({ title, withSearchButton }) {
   const [isSearchBarVisible, setIsSearchBarVisible] = useState(false);
 
-  function toggleSearchBar() {
+  const toggleSearchBar = () => {
     setIsSearchBarVisible(!isSearchBarVisible);
-  }
+  };
 
   return (
-    <header>
+    <header
+      className="flex w-screen fixed top-0 justify-between px-5
+      items-center py-3 bg-slate-200 drop-shadow-lg z-50 border-b border-slate-300"
+    >
       <Link to="/profile">
         <img
           src={ profileIcon }
@@ -34,8 +38,14 @@ function Header({ title, withSearchButton }) {
         )
       }
       {
-        isSearchBarVisible
-        && <input data-testid="search-input" type="text" />
+        isSearchBarVisible && (
+          <div
+            className="w-screen fixed top-14 left-0 bg-slate-200 py-4 box-shadow-xl
+            transition-all duration-1000"
+          >
+            <SearchBar toggleVisible={ toggleSearchBar } />
+          </div>
+        )
       }
     </header>
   );

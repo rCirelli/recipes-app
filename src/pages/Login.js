@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Redirect } from 'react-router-dom';
+import LoginInput from '../components/inputs/LoginInput';
 
 const MIN_PASSWORD_LENGTH = 6;
 
@@ -10,12 +11,15 @@ function Login() {
   const [hasToBeRedirect, setHasToBeRedirect] = useState(false);
 
   function handleSubmit(event) {
+    console.log('teste');
     event.preventDefault();
     localStorage.setItem('user', JSON.stringify({ email: emailInput }));
     localStorage.setItem('mealsToken', JSON.stringify(1));
     localStorage.setItem('cocktailsToken', JSON.stringify(1));
     setHasToBeRedirect(true);
   }
+
+  const isEmailValid = () => /\S+@\S+\.\S+/.test(emailInput);
 
   useEffect(() => {
     const formatEmail = /\S+@\S+\.\S+/;
@@ -26,13 +30,13 @@ function Login() {
     }
   }, [passwordLength, emailInput]);
 
-  function handleEmail({ target }) {
+  const handleEmail = ({ target }) => {
     setEmailInput(target.value);
-  }
+  };
 
-  function handlePassword({ target }) {
+  const handlePassword = ({ target }) => {
     setPasswordLength(target.value.length);
-  }
+  };
 
   return (
 
@@ -41,39 +45,46 @@ function Login() {
         <Redirect to="/foods" />
       )
       : (
-        <div className="bg-slate-200">
-          <form
-            className="flex flex-col justify-center items-center"
-            onSubmit={ handleSubmit }
-          >
-            <label htmlFor="email-input">
-              Insira seu e-mail
-              <input
-                value={ emailInput }
-                onChange={ handleEmail }
+        <div
+          className="w-screen h-screen flex flex-col justify-center items-center
+            bg-slate-200"
+        >
+          <div className="bg-slate-100 rounded-lg px-7 pt-4 pb-8 drop-shadow-md">
+            <form
+              className="flex flex-col justify-center items-center gap-4"
+              onSubmit={ handleSubmit }
+            >
+              <LoginInput
                 id="email-input"
                 type="email"
-                data-testid="email-input"
+                label="Email"
+                placeholder="Email"
+                value={ emailInput }
+                handleInput={ handleEmail }
+                validStyle={ isEmailValid() ? 'emerald-500' : 'red-600' }
               />
-            </label>
-            <label htmlFor="password-input">
-              Insira sua senha
-              <input
-                onChange={ handlePassword }
+              <LoginInput
                 id="password-input"
                 type="password"
-                data-testid="password-input"
+                label="Password"
+                placeholder="Password"
+                handleInput={ handlePassword }
+                validStyle={
+                  passwordLength <= MIN_PASSWORD_LENGTH ? 'red-600' : 'emerald-500'
+                }
               />
-            </label>
-            <button
-              disabled={ isBtnDisable }
-              data-testid="login-submit-btn"
-              type="submit"
-            >
-              Enter
-
-            </button>
-          </form>
+              <button
+                disabled={ isBtnDisable }
+                data-testid="login-submit-btn"
+                type="submit"
+                className="bg-emerald-500 w-full py-2 text-lg rounded-lg mt-5
+                text-slate-200 font-medium tracking-wider active:bg-emerald-600
+                drop-shadow active:drop-shadow-xl disabled:bg-slate-600/30"
+              >
+                Login
+              </button>
+            </form>
+          </div>
         </div>
       )
   );
