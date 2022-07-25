@@ -1,6 +1,7 @@
 import React, { useContext, useEffect, useState } from 'react';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
+import Recipes from '../components/Recipes';
 import RecipeContext from '../context/RecipeContext';
 
 function Foods() {
@@ -18,6 +19,7 @@ function Foods() {
   return (
     <div className="py-14">
       <Header title="Foods" withSearchButton />
+      <Recipes isMeal />
       {recipesList.length > 0 && (
         <ul>
           {recipesList.map((item, index) => (index < MAX_RESULTS ? (
