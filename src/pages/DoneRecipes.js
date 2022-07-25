@@ -45,7 +45,7 @@ function DoneRecipes() {
       : (
         <div>
           <Header title="Done Recipes" />
-          <div>
+          <div className="mt-20">
             <button
               onClick={ handleFilterBtns }
               data-testid="filter-by-all-btn"
