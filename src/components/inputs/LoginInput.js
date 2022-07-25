@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 function LoginInput({ id, type, label, placeholder, value, handleInput, validStyle }) {
   return (
     <label
-      htmlFor="email-input"
+      htmlFor={ id }
       className="flex flex-col items-start"
     >
       <input

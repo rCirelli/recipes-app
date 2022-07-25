@@ -9,13 +9,13 @@ describe('Testa a tela Profile', () => {
     renderWithRouter(<App />);
 
     const testEmail = 'test@test.test';
-    const inputEmail = screen.getByText(/insira seu e-mail/i);
-    const inputPassword = screen.getByText(/insira sua senha/i);
-    const loginBtn = screen.getByRole('button', { name: /enter/i });
+    const emailInput = screen.getByPlaceholderText(/email/i);  
+    const passwordInput = screen.getByPlaceholderText(/password/i);
+    const submitBtn = screen.getByRole('button', { name: /login/i });
 
-    userEvent.type(inputEmail, testEmail);
-    userEvent.type(inputPassword, '1234567');
-    userEvent.click(loginBtn);
+    userEvent.type(emailInput, testEmail);
+    userEvent.type(passwordInput, '1234567');
+    userEvent.click(submitBtn);
 
     const profileIco = screen.getByRole('img', { name: /profile icon/i });
 
