@@ -22,7 +22,7 @@ function Profile() {
   return (
     <div>
       <Header title="Profile" />
-      <div>
+      <div className="mt-20">
         <p data-testid="profile-email">{ user.email }</p>
         <Link to="/done-recipes">
           <button data-testid="profile-done-btn" type="button">Done Recipes</button>

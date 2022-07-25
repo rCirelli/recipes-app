@@ -1,20 +1,21 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { Link } from 'react-router-dom';
+import RecipeContext from '../context/RecipeContext';
 import { getDrink, getDrinkCategories, getSpecificDrink } from '../service/api';
 
 function DrinksCards() {
+  const { searchResponse, setSearchResponse } = useContext(RecipeContext);
   const [drinksCategories, setDrinksCategories] = useState({});
-  const [drinksData, setDrinksData] = useState({});
   const [toggle, setToggle] = useState(false);
 
   const twelve = 12;
   const five = 5;
-  const { drinks } = drinksData;
+  const { drinks } = searchResponse;
 
   useEffect(() => {
     async function addRecipes() {
       const drink = await getDrink();
-      setDrinksData(drink);
+      setSearchResponse(drink);
       const drinkCategories = await getDrinkCategories();
       setDrinksCategories(drinkCategories);
     }
@@ -25,17 +26,17 @@ function DrinksCards() {
     if (toggle === false) {
       setToggle(true);
       const drinkRecipe = await getSpecificDrink(value);
-      setDrinksData(drinkRecipe);
+      setSearchResponse(drinkRecipe);
     } else {
       setToggle(false);
       const drink = await getDrink();
-      setDrinksData(drink);
+      setSearchResponse(drink);
     }
   }
 
   async function handleClick() {
     const drinksRec = await getDrink();
-    setDrinksData(drinksRec);
+    setSearchResponse(drinksRec);
   }
 
   return (

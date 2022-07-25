@@ -1,10 +1,11 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { Link } from 'react-router-dom';
+import RecipeContext from '../context/RecipeContext';
 import { getFood, getFoodCategories, getSpecificMeal } from '../service/api';
 
 function FoodsCards() {
+  const { searchResponse, setSearchResponse } = useContext(RecipeContext);
   const [foodCategories, setFoodCategories] = useState({});
-  const [foodData, setfoodData] = useState({});
   const [toggle, setToggle] = useState(false);
 
   const twelve = 12;
@@ -13,7 +14,7 @@ function FoodsCards() {
   useEffect(() => {
     async function addRecipes() {
       const foods = await getFood();
-      setfoodData(foods);
+      setSearchResponse(foods);
       const mealCategories = await getFoodCategories();
       setFoodCategories(mealCategories);
     }
@@ -24,17 +25,17 @@ function FoodsCards() {
     if (toggle === false) {
       setToggle(true);
       const mealRecipe = await getSpecificMeal(value);
-      setfoodData(mealRecipe);
+      setSearchResponse(mealRecipe);
     } else {
       setToggle(false);
       const foods = await getFood();
-      setfoodData(foods);
+      setSearchResponse(foods);
     }
   }
 
   async function handleClick() {
     const foods = await getFood();
-    setfoodData(foods);
+    setSearchResponse(foods);
   }
 
   return (
@@ -61,7 +62,7 @@ function FoodsCards() {
         </button>
       </div>
       <div>
-        {foodData?.meals?.slice(0, twelve).map((meal, index) => (
+        {searchResponse?.meals?.slice(0, twelve).map((meal, index) => (
           <div
             key={ meal.idMeal }
             data-testid={ String(index).concat('-recipe-card') }
