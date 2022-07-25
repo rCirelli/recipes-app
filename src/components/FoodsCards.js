@@ -39,12 +39,12 @@ function FoodsCards() {
   }
 
   return (
-    <div className="w-screen ">
+    <div className="w-screen">
       <div className="w-full flex items-center gap-3 py-4 overflow-x-auto px-4">
         {foodCategories?.meals?.slice(0, five).map((categories, index) => (
           <button
             className="border px-5 py-1 rounded-lg bg-emerald-500 text-white
-            font-medium tracking-wide"
+            font-medium tracking-wide whitespace-nowrap"
             type="button"
             key={ index }
             value={ categories.strCategory }
@@ -66,34 +66,36 @@ function FoodsCards() {
           All
         </button>
       </div>
-      <div className="px-4 w-full flex flex-col items-center gap-5">
-        {searchResponse?.meals?.slice(0, twelve).map((meal, index) => (
-          <div
-            className="w-full bg-slate-100 rounded-lg
-            drop-shadow-md text-ellipsis"
-            key={ meal.idMeal }
-            data-testid={ String(index).concat('-recipe-card') }
-          >
-            <Link
-              className="w-full flex items-center gap-3"
-              to={ '/foods/'.concat(meal.idMeal) }
+      {searchResponse?.meals?.slice(0, twelve) && (
+        <div className="px-4 w-full flex flex-col items-center gap-5 mb-16">
+          {searchResponse?.meals?.slice(0, twelve).map((meal, index) => (
+            <div
+              className="w-full bg-slate-100 rounded-lg
+              drop-shadow-md text-ellipsis"
+              key={ meal.idMeal }
+              data-testid={ String(index).concat('-recipe-card') }
             >
-              <img
-                className="w-2/6 rounded-l-lg"
-                data-testid={ String(index).concat('-card-img') }
-                src={ meal.strMealThumb }
-                alt={ meal.strMeal }
-              />
-              <p
-                className="text-ellipsis overflow-hidden"
-                data-testid={ String(index).concat('-card-name') }
+              <Link
+                className="w-full flex items-center gap-3"
+                to={ '/foods/'.concat(meal.idMeal) }
               >
-                {meal.strMeal}
-              </p>
-            </Link>
-          </div>
-        ))}
-      </div>
+                <img
+                  className="w-2/6 rounded-l-lg"
+                  data-testid={ String(index).concat('-card-img') }
+                  src={ meal.strMealThumb }
+                  alt={ meal.strMeal }
+                />
+                <p
+                  className="text-ellipsis overflow-hidden"
+                  data-testid={ String(index).concat('-card-name') }
+                >
+                  {meal.strMeal}
+                </p>
+              </Link>
+            </div>
+          ))}
+        </div>
+      )}
     </div>
   );
 }

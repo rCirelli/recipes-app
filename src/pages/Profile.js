@@ -20,30 +20,44 @@ function Profile() {
   }, []);
 
   return (
-    <div>
+    <div className="h-screen overflow-hidden">
       <Header title="Profile" />
-      <div className="mt-20">
-        <p data-testid="profile-email">{ user.email }</p>
-        <Link to="/done-recipes">
-          <button data-testid="profile-done-btn" type="button">Done Recipes</button>
-        </Link>
-        <Link to="/favorite-recipes">
-          <button
-            data-testid="profile-favorite-btn"
-            type="button"
-          >
-            Favorite Recipes
-
+      <div className="h-full flex flex-col items-center gap-5 mt-10 p-5">
+        <p
+          className="text-xl"
+          data-testid="profile-email"
+        >
+          {user.email}
+        </p>
+        <Link
+          to="/done-recipes"
+          className="w-full px-10 py-3 rounded-lg bg-emerald-500 text-slate-50
+          font-medium tracking-wider text-center active:bg-emerald-600"
+        >
+          <button data-testid="profile-done-btn" type="button">
+            Done Recipes
           </button>
         </Link>
-        <Link to="/">
+        <Link
+          to="/favorite-recipes"
+          className="w-full px-10 py-3 rounded-lg bg-emerald-500 text-slate-50
+          font-medium tracking-wider text-center active:bg-emerald-600"
+        >
+          <button data-testid="profile-favorite-btn" type="button">
+            Favorite Recipes
+          </button>
+        </Link>
+        <Link
+          className="w-full px-10 py-3 rounded-lg bg-slate-200 text-slate-700
+          font-medium tracking-wider text-center active:bg-slate-300"
+          to="/"
+        >
           <button
             onClick={ handleLogout }
             data-testid="profile-logout-btn"
             type="button"
           >
             Logout
-
           </button>
         </Link>
       </div>

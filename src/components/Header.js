@@ -14,7 +14,7 @@ function Header({ title, withSearchButton }) {
 
   return (
     <header
-      className="flex w-screen fixed top-0 justify-between px-5
+      className="flex w-screen sticky top-0 justify-between px-5
       items-center py-3 bg-slate-200 drop-shadow-lg z-50 border-b border-slate-300"
     >
       <Link to="/profile">
@@ -48,8 +48,8 @@ function Header({ title, withSearchButton }) {
       {
         isSearchBarVisible && (
           <div
-            className="w-screen fixed top-14 left-0 bg-slate-200 py-4 box-shadow-xl
-            transition-all duration-1000"
+            className="w-screen fixed top-12 left-0 bg-slate-200 py-4 box-shadow-xl
+            transition-all duration-1000 border-t border-slate-300"
           >
             <SearchBar toggleVisible={ toggleSearchBar } />
           </div>

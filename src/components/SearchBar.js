@@ -82,14 +82,14 @@ function SearchBar({ toggleVisible }) {
   return shouldRedirect ? (
     <Redirect to={ redirectTarget } />
   ) : (
-    <form className="flex flex-col items-center gap-2 px-7 py-2">
+    <form className="flex flex-col items-center gap-2 px-7 py-1">
       <input
-        className="bg-slate-300 rounded px-3 py-1 w-full"
+        className="bg-slate-300 rounded-lg px-3 py-2 w-full"
         onChange={ handleInput }
         data-testid="search-input"
         type="text"
       />
-      <div className="flex flex-col gap-2">
+      <div className="flex flex-col gap-4 my-3">
         <label
           htmlFor="ingredient-search-radio"
           className="flex items-center gap-3"
@@ -101,7 +101,10 @@ function SearchBar({ toggleVisible }) {
             data-testid="ingredient-search-radio"
             type="radio"
             id="ingredient-search-radio"
-            className="form-radio h-4 w-4"
+            // className="form-radio h-4 w-4"
+            className="h-5 w-5 appearance-none border border-gray-300 rounded-full
+            checked:bg-blue-500 checked:border-blue-500 transition-all
+            duration-250 checked:ring-2 ring-inset ring-slate-200"
           />
           Ingredient
         </label>
@@ -113,7 +116,9 @@ function SearchBar({ toggleVisible }) {
             data-testid="name-search-radio"
             type="radio"
             id="name-search-radio"
-            className="form-radio h-4 w-4"
+            className="h-5 w-5 appearance-none border border-gray-300 rounded-full
+            checked:bg-blue-500 checked:border-blue-500 transition-all
+            duration-250 checked:ring-2 ring-inset ring-slate-200"
           />
           Name
         </label>
@@ -128,7 +133,9 @@ function SearchBar({ toggleVisible }) {
             data-testid="first-letter-search-radio"
             type="radio"
             id="first-letter-search-radio"
-            className="form-radio h-4 w-4"
+            className="h-5 w-5 appearance-none border border-gray-300 rounded-full
+            checked:bg-blue-500 checked:border-blue-500 transition-all
+            duration-250 checked:ring-2 ring-inset ring-slate-200"
           />
           First Letter
         </label>

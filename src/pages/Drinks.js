@@ -17,15 +17,15 @@ function Drinks() {
   }, [searchResponse]);
 
   return (
-    <div className="py-14">
+    <div>
       <Header title="Drinks" withSearchButton />
       <Recipes isMeal={ false } />
       {recipesList.length > 0 && (
-        <ul>
+        <ul className="flex flex-col items-center gap-5 mb-16">
           {recipesList.map((item, index) => (index < MAX_RESULTS ? (
             <li key={ item.idDrink }>
               <div
-                className="flex items-center bg-slate-100 my-5 mx-4 rounded-lg gap-2
+                className="flex items-center bg-slate-100 mx-4 rounded-lg gap-2
                 drop-shadow-md"
                 data-testid={ `${index}-recipe-card` }
               >
@@ -36,9 +36,9 @@ function Drinks() {
                   alt={ item.strDrink }
                 />
                 <div>
-                  <p className="italic text-sm text-slate-500/90">
+                  {/* <p className="italic text-sm text-slate-500/90">
                     {`${item.strAlcoholic} - ${item.strCategory}`}
-                  </p>
+                  </p> */}
                   <p data-testid={ `${index}-card-name` }>{item.strDrink}</p>
                 </div>
               </div>

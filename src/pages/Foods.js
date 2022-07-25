@@ -17,11 +17,11 @@ function Foods() {
   }, [searchResponse]);
 
   return (
-    <div className="py-14">
+    <div>
       <Header title="Foods" withSearchButton />
       <Recipes isMeal />
       {recipesList.length > 0 && (
-        <ul className="flex flex-col items-center gap-5">
+        <ul className="flex flex-col items-center gap-5 mb-16">
           {recipesList.map((item, index) => (index < MAX_RESULTS ? (
             <li key={ item.idMeal }>
               <div
@@ -40,11 +40,7 @@ function Foods() {
                   <p className="italic text-sm text-slate-500/90">
                     {`${item.strArea} - ${item.strCategory}`}
                   </p> */}
-                  <p
-                    data-testid={ `${index}-card-name` }
-                  >
-                    {item.strMeal}
-                  </p>
+                  <p data-testid={ `${index}-card-name` }>{item.strMeal}</p>
                 </div>
               </div>
             </li>
