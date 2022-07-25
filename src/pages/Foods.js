@@ -21,11 +21,11 @@ function Foods() {
       <Header title="Foods" withSearchButton />
       <Recipes isMeal />
       {recipesList.length > 0 && (
-        <ul>
+        <ul className="flex flex-col items-center gap-5">
           {recipesList.map((item, index) => (index < MAX_RESULTS ? (
             <li key={ item.idMeal }>
               <div
-                className="flex items-center bg-slate-100 my-5 mx-4 rounded-lg gap-2
+                className="flex items-center bg-slate-100 mx-4 rounded-lg gap-2
                 drop-shadow-md"
                 data-testid={ `${index}-recipe-card` }
               >
@@ -40,7 +40,11 @@ function Foods() {
                   <p className="italic text-sm text-slate-500/90">
                     {`${item.strArea} - ${item.strCategory}`}
                   </p> */}
-                  <p data-testid={ `${index}-card-name` }>{item.strMeal}</p>
+                  <p
+                    data-testid={ `${index}-card-name` }
+                  >
+                    {item.strMeal}
+                  </p>
                 </div>
               </div>
             </li>

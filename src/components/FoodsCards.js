@@ -39,21 +39,26 @@ function FoodsCards() {
   }
 
   return (
-    <div>
-      <div>
+    <div className="w-screen ">
+      <div className="w-full flex items-center gap-3 py-4 overflow-x-auto px-4">
         {foodCategories?.meals?.slice(0, five).map((categories, index) => (
           <button
+            className="border px-5 py-1 rounded-lg bg-emerald-500 text-white
+            font-medium tracking-wide"
             type="button"
             key={ index }
             value={ categories.strCategory }
-            data-testid={ String(categories.strCategory).concat('-category-filter') }
+            data-testid={ String(categories.strCategory).concat(
+              '-category-filter',
+            ) }
             onClick={ filterRecipes }
           >
             {categories.strCategory}
-
           </button>
         ))}
         <button
+          className="border px-5 py-1 rounded-lg bg-emerald-500 text-white
+          font-medium tracking-wide"
           type="button"
           onClick={ handleClick }
           data-testid="All-category-filter"
@@ -61,20 +66,31 @@ function FoodsCards() {
           All
         </button>
       </div>
-      <div>
+      <div className="px-4 w-full flex flex-col items-center gap-5">
         {searchResponse?.meals?.slice(0, twelve).map((meal, index) => (
           <div
+            className="w-full bg-slate-100 rounded-lg
+            drop-shadow-md text-ellipsis"
             key={ meal.idMeal }
             data-testid={ String(index).concat('-recipe-card') }
           >
-            <Link to={ '/foods/'.concat(meal.idMeal) }>
+            <Link
+              className="w-full flex items-center gap-3"
+              to={ '/foods/'.concat(meal.idMeal) }
+            >
               <img
+                className="w-2/6 rounded-l-lg"
                 data-testid={ String(index).concat('-card-img') }
                 src={ meal.strMealThumb }
                 alt={ meal.strMeal }
               />
+              <p
+                className="text-ellipsis overflow-hidden"
+                data-testid={ String(index).concat('-card-name') }
+              >
+                {meal.strMeal}
+              </p>
             </Link>
-            <p data-testid={ String(index).concat('-card-name') }>{meal.strMeal}</p>
           </div>
         ))}
       </div>

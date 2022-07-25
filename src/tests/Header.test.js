@@ -50,7 +50,8 @@ describe("Teste do componente header" , () => {
 
   it("Deve aparecer um input ao clicar no botão de pesquisar e desaparecer ao clicar novamente", () => {
     renderWithRouter(<Header title="titulo aleatório" withSearchButton />);
-    const searchButton = screen.getByRole("button", { name: /search icon/i });
+    // const searchButton = screen.getByRole("button", { name: /search icon/i });
+    const searchButton = screen.getByTestId("search-top-btn");
 
     userEvent.click(searchButton);
 
