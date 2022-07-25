@@ -29,9 +29,8 @@ function Header({ title, withSearchButton }) {
         /> */}
       </Link>
       <h1 data-testid="page-title">{title}</h1>
-      {
-        withSearchButton
-        && (
+      { withSearchButton
+        ? (
           <button type="button" onClick={ toggleSearchBar }>
             <i
               data-testid="search-top-btn"
@@ -44,7 +43,7 @@ function Header({ title, withSearchButton }) {
             /> */}
           </button>
         )
-      }
+        : <p> </p>}
       {
         isSearchBarVisible && (
           <div
