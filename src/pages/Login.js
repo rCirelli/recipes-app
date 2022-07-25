@@ -11,7 +11,6 @@ function Login() {
   const [hasToBeRedirect, setHasToBeRedirect] = useState(false);
 
   function handleSubmit(event) {
-    console.log('teste');
     event.preventDefault();
     localStorage.setItem('user', JSON.stringify({ email: emailInput }));
     localStorage.setItem('mealsToken', JSON.stringify(1));

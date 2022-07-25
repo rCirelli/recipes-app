@@ -50,7 +50,7 @@ function FavoriteRecipes() {
         <Redirect to={ whereRedirect } />
       )
       : (
-        <div>
+        <div className="mt-20">
           <Header title="Favorite Recipes" />
           <div>
             <button
