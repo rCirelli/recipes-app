@@ -1,12 +1,9 @@
 import React, { useState, useEffect } from 'react';
-// import { Redirect } from 'react-router-dom';
 import DoneRecipesCard from '../components/DoneRecipesCard';
 import Header from '../components/Header';
 
 function DoneRecipes() {
   const [actualFilter, setActualFilter] = useState('');
-  // const [hasToBeRedirect, setHasToBeRedirect] = useState(false);
-  // const [whereRedirect, setWhereRedirect] = useState('/');
   const [doneRecipes, setDoneRecipes] = useState([]);
 
   function getLocalStorageDoneRecipes() {
@@ -24,11 +21,6 @@ function DoneRecipes() {
   function handleFilterBtns({ target }) {
     setActualFilter(target.value);
   }
-
-  // const handleRedirectToDetails = (id, type) => {
-  //   setWhereRedirect(`/${type}s/${id}`);
-  //   setHasToBeRedirect(true);
-  // };
 
   return (
     <div className="w-screen">

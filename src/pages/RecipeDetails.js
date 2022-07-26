@@ -65,6 +65,7 @@ function RecipeDetails({ recipeType }) {
     food: {
       id: 'idMeal',
       thumbnail: 'strMealThumb',
+      nationality: 'strArea',
       name: 'strMeal',
       category: 'strCategory',
     },
@@ -80,17 +81,19 @@ function RecipeDetails({ recipeType }) {
     // ? para adicionar a receita à lista de 'inProgress'
     const storageKeys = { food: 'meals', drink: 'cocktails' };
 
-    const ingredientsNumber = recipeDetails.ingredients.map((_, index) => index + 1);
-    const newInProgressRecipe = {
-      [recipeDetails[type[recipeType].id]]: ingredientsNumber,
+    if (!inProgress) {
+      const ingredientsNumber = recipeDetails.ingredients.map((_, index) => index + 1);
+      const newInProgressRecipe = {
+        [recipeDetails[type[recipeType].id]]: ingredientsNumber,
       // [recipeDetails[type[recipeType].id]]: recipeDetails.ingredients,
-    };
-    const newInprogressList = {
-      ...inProgress,
-      [storageKeys[recipeType]]: newInProgressRecipe,
-    };
+      };
+      const newInprogressList = {
+        ...inProgress,
+        [storageKeys[recipeType]]: newInProgressRecipe,
+      };
+      setInProgress(newInprogressList);
+    }
 
-    setInProgress(newInprogressList);
     setRedirect(true);
   };
 
@@ -158,7 +161,18 @@ function RecipeDetails({ recipeType }) {
               </div>
               <div className="flex gap-5">
                 <ShareBtn slug={ window.location.href } />
-                <FavoriteBtn recipeInfo={ recipeDetails } recipeType={ recipeType } />
+                <FavoriteBtn
+                  recipeInfo={
+                    { id,
+                      type: recipeType,
+                      nationality: recipeDetails[type[recipeType].nationality] || '',
+                      category: recipeDetails.strCategory || '',
+                      alcoholicOrNot: recipeDetails.strAlcoholic || '',
+                      name: recipeDetails[type[recipeType].name],
+                      image: recipeDetails[type[recipeType].thumbnail] }
+                  }
+                  recipeType={ recipeType }
+                />
               </div>
             </div>
             <h3 className="text-xl font-medium mb-2">Ingredients</h3>
@@ -213,8 +227,8 @@ function RecipeDetails({ recipeType }) {
             type="button"
             disabled={ isBtnDisabled }
             data-testid="start-recipe-btn"
-            className="w-11/12 mx-auto bg-emerald-500 py-4 text-lg font-medium
-                tracking-loose rounded-t-full text-slate-200 fixed bottom-0 inset-x-0
+            className="w-11/12 mx-auto bg-emerald-500 py-3 text-lg font-medium
+                tracking-loose rounded-full text-slate-100 fixed bottom-4 inset-x-0
                 disabled:bg-slate-700/0 disabled:text-slate-400/0"
             onClick={ handleStartRecipe }
           >

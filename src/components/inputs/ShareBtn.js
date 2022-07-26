@@ -1,8 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 
-// import shareIcon from '../../images/shareIcon.svg';
-
 const copy = require('clipboard-copy');
 
 function ShareBtn({ slug }) {
@@ -33,15 +31,14 @@ function ShareBtn({ slug }) {
       data-testid="share-btn"
       onClick={ handleCopy }
     >
-      {/* <img src={ shareIcon } alt="Share" /> */}
       <i
         className="fa-solid fa-share-nodes fa-lg"
       />
       { displayMsg && (
         <div
-          className="absolute border border-1 border-slate-300 rounded-md w-20
-            p-1 right-0 -top-7 font-light text-slate-800 backdrop-blur-sm
-            text-xs font-medium"
+          className="absolute border border-1 border-emerald-600 rounded-md w-20
+            p-1 right-0 -top-7 text-emerald-600 backdrop-blur-sm
+            text-xs font-medium antialiased"
         >
           <p>Link copied!</p>
         </div>

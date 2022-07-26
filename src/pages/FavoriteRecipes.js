@@ -1,16 +1,10 @@
 import React, { useEffect, useState } from 'react';
-import { Redirect } from 'react-router-dom';
-import shareIcon from '../images/shareIcon.svg';
 import Header from '../components/Header';
-import unfavoriteIcon from '../images/blackHeartIcon.svg';
 import DoneRecipesCard from '../components/DoneRecipesCard';
 
 function FavoriteRecipes() {
   const [actualFilter, setActualFilter] = useState('');
-  const [linkIsCopied, setLinkIsCopied] = useState(false);
   const [favoriteRecipes, setFavoriteRecipes] = useState([]);
-  const [hasToBeRedirect, setHasToBeRedirect] = useState(false);
-  const [whereRedirect, setWhereRedirect] = useState('/');
 
   function getLocalStorageFavoriteRecipes() {
     const favRecipes = localStorage.getItem('favoriteRecipes');
@@ -24,30 +18,11 @@ function FavoriteRecipes() {
     getLocalStorageFavoriteRecipes();
   }, []);
 
-  function handleRedirectToDetails(id, type) {
-    setWhereRedirect(`/${type}s/${id}`);
-    setHasToBeRedirect(true);
-  }
-
-  function handleShareBtn(id, type) {
-    const urlToBeClip = `http://localhost:3000/${type}s/${id}`;
-    navigator.clipboard.writeText(urlToBeClip);
-    setLinkIsCopied(true);
-  }
-
-  function unFavRecipe(id) {
-    const newRecipes = favoriteRecipes.filter((recipe) => recipe.id !== id);
-    localStorage.setItem('favoriteRecipes', JSON.stringify(newRecipes));
-    setFavoriteRecipes(newRecipes);
-  }
-
   function handleFilterBtns({ target }) {
     setActualFilter(target.value);
   }
 
-  return hasToBeRedirect ? (
-    <Redirect to={ whereRedirect } />
-  ) : (
+  return (
     <div>
       <Header title="Favorite Recipes" />
       <div className="w-full flex justify-between items-center p-4">
@@ -101,88 +76,6 @@ function FavoriteRecipes() {
               url={ `/${recipe.type}s/${recipe.id}` }
               favoriteBtn
             />
-
-          //   <div key={ index }>
-          //     <button
-          //       type="button"
-          //       onClick={ () => handleRedirectToDetails(recipe.id, recipe.type) }
-          //     >
-          //       <img
-          //         src={ `${recipe.image}` }
-          //         alt={ recipe.name }
-          //         data-testid={ `${index}-horizontal-image` }
-          //       />
-          //     </button>
-          //     <p data-testid={ `${index}-horizontal-top-text` }>
-          //       {`${recipe.nationality} - ${recipe.category}`}
-          //     </p>
-          //     <button
-          //       type="button"
-          //       onClick={ () => handleRedirectToDetails(recipe.id, recipe.type) }
-          //     >
-          //       <p data-testid={ `${index}-horizontal-name` }>{recipe.name}</p>
-          //     </button>
-          //     <br />
-          //     <button
-          //       onClick={ () => handleShareBtn(recipe.id, recipe.type) }
-          //       type="button"
-          //     >
-          //       <img
-          //         data-testid={ `${index}-horizontal-share-btn` }
-          //         src={ shareIcon }
-          //         alt="Botão de compartilhar"
-          //       />
-          //     </button>
-          //     {linkIsCopied && <p>Link copied!</p>}
-          //     <button type="button" onClick={ () => unFavRecipe(recipe.id) }>
-          //       <img
-          //         src={ unfavoriteIcon }
-          //         data-testid={ `${index}-horizontal-favorite-btn` }
-          //         alt="Ícone para desfavoritar uma receita"
-          //       />
-          //     </button>
-          //   </div>
-          // ) : (
-          //   <div key={ index }>
-          //     <button
-          //       type="button"
-          //       onClick={ () => handleRedirectToDetails(recipe.id, recipe.type) }
-          //     >
-          //       <img
-          //         src={ `${recipe.image}` }
-          //         alt={ recipe.name }
-          //         data-testid={ `${index}-horizontal-image` }
-          //       />
-          //     </button>
-          //     <p data-testid={ `${index}-horizontal-top-text` }>
-          //       {recipe.alcoholicOrNot}
-          //     </p>
-          //     <button
-          //       type="button"
-          //       onClick={ () => handleRedirectToDetails(recipe.id, recipe.type) }
-          //     >
-          //       <p data-testid={ `${index}-horizontal-name` }>{recipe.name}</p>
-          //     </button>
-          //     <br />
-          //     <button
-          //       onClick={ () => handleShareBtn(recipe.id, recipe.type) }
-          //       type="button"
-          //     >
-          //       <img
-          //         data-testid={ `${index}-horizontal-share-btn` }
-          //         src={ shareIcon }
-          //         alt="Botão de compartilhar"
-          //       />
-          //     </button>
-          //     {linkIsCopied && <p>Link copied!</p>}
-          //     <button type="button" onClick={ () => unFavRecipe(recipe.id) }>
-          //       <img
-          //         data-testid={ `${index}-horizontal-favorite-btn` }
-          //         src={ unfavoriteIcon }
-          //         alt="Ícone para desfavoritar uma receita"
-          //       />
-          //     </button>
-          //   </div>
           )))}
       </div>
     </div>
