@@ -43,7 +43,7 @@ function Header({ title, withSearchButton }) {
             /> */}
           </button>
         )
-        : <p> </p>}
+        : <p className="w-[1.5rem]" />}
       {
         isSearchBarVisible && (
           <div

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 
-import shareIcon from '../../images/shareIcon.svg';
+// import shareIcon from '../../images/shareIcon.svg';
 
 const copy = require('clipboard-copy');
 
@@ -27,23 +27,26 @@ function ShareBtn({ slug }) {
   }, [displayMsg]);
 
   return (
-    <>
-      <button
-        type="button"
-        data-testid="share-btn"
-        onClick={ handleCopy }
-      >
-        <img src={ shareIcon } alt="Share" />
-      </button>
+    <button
+      className="relative"
+      type="button"
+      data-testid="share-btn"
+      onClick={ handleCopy }
+    >
+      {/* <img src={ shareIcon } alt="Share" /> */}
+      <i
+        className="fa-solid fa-share-nodes fa-lg"
+      />
       { displayMsg && (
         <div
-          className="absolute bg-slate-50 border border-1 border-slate-200 rounded-lg
-            p-1 right-10 top-[23rem] font-light text-slate-800"
+          className="absolute border border-1 border-slate-300 rounded-md w-20
+            p-1 right-0 -top-7 font-light text-slate-800 backdrop-blur-sm
+            text-xs font-medium"
         >
           <p>Link copied!</p>
         </div>
       )}
-    </>
+    </button>
   );
 }
 
