@@ -1,5 +1,10 @@
 # 🚧 README em construção 🚧
 
+feito em conjunto com :
+https://github.com/Talisson-Sozinho
+https://github.com/Mendri
+https://github.com/Lucas-Faleiro
+
 <!-- Olá, Tryber!
 
 Esse é apenas um arquivo inicial para o README do seu projeto.
